@@ -20,6 +20,32 @@ Alibaba Qwen CLI를 위한 멀티 에이전트 오케스트레이션 하네스. 
 - **MCP 통합** -- Model Context Protocol 서버
 - **프롬프트 관리** -- YAML 프론트매터가 포함된 마크다운 기반 프롬프트 정의
 
+## 원클릭 설치
+
+저장소를 클론한 뒤 플랫폼에 맞는 설치 스크립트를 실행하세요:
+
+```bash
+git clone https://github.com/KIM3310/qwen-pilot.git
+cd qwen-pilot
+```
+
+**macOS / Linux:**
+```bash
+./install.sh
+```
+
+**Windows (CMD):**
+```cmd
+install.bat
+```
+
+**Windows (PowerShell):**
+```powershell
+.\install.ps1
+```
+
+설치 스크립트가 Node.js 설치, Qwen CLI 설정, 의존성 설치, 빌드, `qp` 명령어 글로벌 등록을 자동으로 처리합니다.
+
 ## 요구 사항
 
 - Node.js >= 20.0.0

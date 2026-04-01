@@ -26,7 +26,10 @@
     "workflows",
     "AGENTS.md",
     "README.md",
-    "README.ko.md"
+    "README.ko.md",
+    "install.sh",
+    "install.bat",
+    "install.ps1"
   ],
   "scripts": {
     "build": "tsc",

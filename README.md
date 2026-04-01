@@ -20,6 +20,32 @@ Multi-agent orchestration harness for Alibaba Qwen CLI. Provides prompt manageme
 - **MCP Integration** -- Model Context Protocol server for tool-based interaction
 - **Prompt Management** -- Markdown-based prompt definitions with YAML frontmatter
 
+## Quick Install
+
+Clone the repo and run the one-click installer for your platform:
+
+```bash
+git clone https://github.com/KIM3310/qwen-pilot.git
+cd qwen-pilot
+```
+
+**macOS / Linux:**
+```bash
+./install.sh
+```
+
+**Windows (CMD):**
+```cmd
+install.bat
+```
+
+**Windows (PowerShell):**
+```powershell
+.\install.ps1
+```
+
+The installer automatically handles Node.js installation, Qwen CLI setup, dependency installation, building, and global linking of the `qp` command.
+
 ## Requirements
 
 - Node.js >= 20.0.0
