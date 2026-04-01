@@ -27,9 +27,9 @@
     "AGENTS.md",
     "README.md",
     "README.ko.md",
-    "install.sh",
-    "install.bat",
-    "install.ps1"
+    "Install-Mac.command",
+    "Install-Windows.bat",
+    "Install-Linux.sh"
   ],
   "scripts": {
     "build": "tsc",

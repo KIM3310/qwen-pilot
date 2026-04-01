@@ -22,29 +22,18 @@ Multi-agent orchestration harness for Alibaba Qwen CLI. Provides prompt manageme
 
 ## Quick Install
 
-Clone the repo and run the one-click installer for your platform:
-
 ```bash
 git clone https://github.com/KIM3310/qwen-pilot.git
 cd qwen-pilot
 ```
 
-**macOS / Linux:**
-```bash
-./install.sh
-```
+| Platform | How to install |
+|----------|---------------|
+| **macOS** | Double-click **`Install-Mac.command`** |
+| **Windows** | Double-click **`Install-Windows.bat`** |
+| **Linux** | Run `./Install-Linux.sh` in a terminal |
 
-**Windows (CMD):**
-```cmd
-install.bat
-```
-
-**Windows (PowerShell):**
-```powershell
-.\install.ps1
-```
-
-The installer automatically handles Node.js installation, Qwen CLI setup, dependency installation, building, and global linking of the `qp` command.
+That's it -- the installer handles Node.js, Qwen CLI, dependencies, build, and global `qp` command registration automatically.
 
 ## Requirements
 
