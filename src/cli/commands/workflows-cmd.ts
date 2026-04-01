@@ -3,6 +3,11 @@ import { loadConfig } from "../../config/index.js";
 import { hookManager } from "../../hooks/index.js";
 import { logger } from "../../utils/index.js";
 
+/**
+ * Display detailed information about a specific workflow.
+ *
+ * @param name - The workflow name (stem of the `.md` file).
+ */
 export async function workflowsShowCommand(name: string): Promise<void> {
   const workflow = await loadWorkflow(name);
   if (!workflow) {
@@ -31,6 +36,9 @@ export async function workflowsShowCommand(name: string): Promise<void> {
   }
 }
 
+/**
+ * List all available workflows from project + built-in directories.
+ */
 export async function workflowsListCommand(): Promise<void> {
   const workflows = await listWorkflows();
 
@@ -55,13 +63,54 @@ export async function workflowsListCommand(): Promise<void> {
   console.log(`\n  Total: ${workflows.length} workflows`);
 }
 
-export async function workflowsRunCommand(name: string, contextArg?: string): Promise<void> {
+/** Options for the workflow run command. */
+export interface WorkflowsRunOptions {
+  dryRun?: boolean;
+}
+
+/**
+ * Execute a named workflow.
+ *
+ * When `--dry-run` is set, each step is printed with its agent and
+ * gate configuration but nothing is executed.
+ *
+ * @param name       - Workflow name.
+ * @param contextArg - Optional extra context string.
+ * @param options    - CLI flags parsed by Commander.
+ */
+export async function workflowsRunCommand(
+  name: string,
+  contextArg?: string,
+  options?: WorkflowsRunOptions,
+): Promise<void> {
   const config = await loadConfig();
   const workflow = await loadWorkflow(name);
 
   if (!workflow) {
     logger.error(`Workflow "${name}" not found`);
     process.exit(1);
+  }
+
+  // --- dry-run mode ---
+  if (options?.dryRun) {
+    logger.banner(`DRY RUN — workflow: ${workflow.meta.name}`);
+    logger.info(`Description: ${workflow.meta.description}`);
+    logger.info(`Steps: ${workflow.steps.length}`);
+    logger.info(`Loop: ${workflow.meta.loop ? `yes (max ${workflow.meta.maxIterations})` : "no"}`);
+    if (contextArg) logger.info(`Context: ${contextArg}`);
+    console.log();
+
+    for (let i = 0; i < workflow.steps.length; i++) {
+      const step = workflow.steps[i]!;
+      logger.step(`[${i + 1}/${workflow.steps.length}] ${step.name}`);
+      if (step.agent) logger.info(`  Agent: ${step.agent}`);
+      logger.info(`  Prompt: ${step.prompt.slice(0, 120)}${step.prompt.length > 120 ? "..." : ""}`);
+      if (step.gate !== "none") logger.info(`  Gate: ${step.gate}`);
+      if (step.retries > 0) logger.info(`  Retries: ${step.retries}`);
+    }
+
+    logger.info("\nNo changes were made (dry-run).");
+    return;
   }
 
   await hookManager.emit("workflow:start", { name: workflow.meta.name });

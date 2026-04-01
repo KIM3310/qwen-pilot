@@ -5,14 +5,28 @@ import { fileExists, readJsonFile, logger } from "../utils/index.js";
 
 const CONFIG_FILENAME = "qwen-pilot.json";
 
+/**
+ * Return the absolute path to the user-level config file
+ * (`~/.config/qwen-pilot/qwen-pilot.json`).
+ */
 export function getUserConfigPath(): string {
   return join(homedir(), ".config", "qwen-pilot", CONFIG_FILENAME);
 }
 
+/**
+ * Return the absolute path to the project-level config file
+ * (`.qwen-pilot/qwen-pilot.json` under the current working directory).
+ */
 export function getProjectConfigPath(): string {
   return join(process.cwd(), ".qwen-pilot", CONFIG_FILENAME);
 }
 
+/**
+ * Apply environment variable overrides on top of a parsed config.
+ *
+ * Supported variables: `QP_MODEL_HIGH`, `QP_MODEL_BALANCED`,
+ * `QP_MODEL_FAST`, `QP_SANDBOX_MODE`, `QP_MAX_WORKERS`.
+ */
 function applyEnvOverrides(config: QwenPilotConfig): QwenPilotConfig {
   const env = process.env;
   const merged = structuredClone(config);
@@ -34,6 +48,9 @@ function applyEnvOverrides(config: QwenPilotConfig): QwenPilotConfig {
   return merged;
 }
 
+/**
+ * Deep-merge two plain objects, preferring values from `override`.
+ */
 function deepMerge(base: Record<string, unknown>, override: Record<string, unknown>): Record<string, unknown> {
   const result = { ...base };
   for (const [key, val] of Object.entries(override)) {
@@ -46,6 +63,12 @@ function deepMerge(base: Record<string, unknown>, override: Record<string, unkno
   return result;
 }
 
+/**
+ * Load the resolved configuration by layering user-level, project-level,
+ * and environment-variable overrides.
+ *
+ * @returns The fully-resolved {@link QwenPilotConfig}.
+ */
 export async function loadConfig(): Promise<QwenPilotConfig> {
   let merged: Record<string, unknown> = {};
 
@@ -80,6 +103,12 @@ export async function loadConfig(): Promise<QwenPilotConfig> {
   return applyEnvOverrides(parsed);
 }
 
+/**
+ * Validate an arbitrary value against the config schema.
+ *
+ * @param raw - The value to validate (typically parsed JSON).
+ * @returns An object with `valid` boolean and an `errors` array.
+ */
 export function validateConfig(raw: unknown): { valid: boolean; errors: string[] } {
   const result = QwenPilotConfigSchema.safeParse(raw);
   if (result.success) {

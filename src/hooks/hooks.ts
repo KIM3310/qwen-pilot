@@ -1,5 +1,6 @@
 import { logger } from "../utils/index.js";
 
+/** Event names emitted throughout the qwen-pilot lifecycle. */
 export type HookEvent =
   | "session:start"
   | "session:end"
@@ -14,6 +15,7 @@ export type HookEvent =
   | "task:fail"
   | "error";
 
+/** Callback signature for hook handlers. */
 export type HookHandler = (event: HookEvent, payload: Record<string, unknown>) => void | Promise<void>;
 
 interface HookRegistration {
@@ -23,27 +25,55 @@ interface HookRegistration {
   once: boolean;
 }
 
+/**
+ * Central event bus for the qwen-pilot lifecycle.
+ *
+ * Listeners can subscribe to specific events or use `"*"` as a wildcard.
+ * Handlers are invoked sequentially and errors are caught so that one
+ * failing handler does not prevent the rest from executing.
+ */
 class HookManager {
   private hooks: HookRegistration[] = [];
   private idCounter = 0;
   private enabled = true;
 
+  /** Enable or disable all hook firing. */
   setEnabled(enabled: boolean): void {
     this.enabled = enabled;
   }
 
+  /**
+   * Register a persistent handler for an event.
+   *
+   * @param event   - Event name or `"*"` for all events.
+   * @param handler - Callback to invoke.
+   * @returns A unique registration ID for later removal.
+   */
   on(event: HookEvent | "*", handler: HookHandler): string {
     const id = `hook_${++this.idCounter}`;
     this.hooks.push({ id, event, handler, once: false });
     return id;
   }
 
+  /**
+   * Register a one-shot handler that is removed after firing once.
+   *
+   * @param event   - Event name or `"*"` for all events.
+   * @param handler - Callback to invoke.
+   * @returns A unique registration ID.
+   */
   once(event: HookEvent | "*", handler: HookHandler): string {
     const id = `hook_${++this.idCounter}`;
     this.hooks.push({ id, event, handler, once: true });
     return id;
   }
 
+  /**
+   * Remove a previously-registered hook by its ID.
+   *
+   * @param id - The registration ID returned by {@link on} or {@link once}.
+   * @returns `true` if the hook was found and removed.
+   */
   off(id: string): boolean {
     const idx = this.hooks.findIndex((h) => h.id === id);
     if (idx === -1) return false;
@@ -51,6 +81,12 @@ class HookManager {
     return true;
   }
 
+  /**
+   * Emit an event, invoking all matching handlers.
+   *
+   * @param event   - The event to emit.
+   * @param payload - Arbitrary data to pass to handlers.
+   */
   async emit(event: HookEvent, payload: Record<string, unknown> = {}): Promise<void> {
     if (!this.enabled) return;
 
@@ -75,13 +111,16 @@ class HookManager {
     }
   }
 
+  /** Remove all registered hooks. */
   clear(): void {
     this.hooks = [];
   }
 
+  /** Return a summary of all currently registered hooks. */
   listRegistered(): Array<{ id: string; event: string }> {
     return this.hooks.map((h) => ({ id: h.id, event: h.event }));
   }
 }
 
+/** Shared singleton hook manager. */
 export const hookManager = new HookManager();

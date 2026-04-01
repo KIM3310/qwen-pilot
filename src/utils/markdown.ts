@@ -1,12 +1,23 @@
+/** Key-value pairs extracted from YAML-like frontmatter. */
 export interface MarkdownFrontmatter {
   [key: string]: string | number | boolean | string[];
 }
 
+/** Result of parsing a markdown file with optional frontmatter. */
 export interface ParsedMarkdown {
+  /** Parsed frontmatter key-value pairs. */
   frontmatter: MarkdownFrontmatter;
+  /** The markdown body after the frontmatter block. */
   body: string;
 }
 
+/**
+ * Parse a markdown string that may begin with a `---` delimited
+ * frontmatter block.
+ *
+ * @param content - Raw markdown content.
+ * @returns Parsed frontmatter and body.
+ */
 export function parseMarkdownWithFrontmatter(content: string): ParsedMarkdown {
   const trimmed = content.trim();
   if (!trimmed.startsWith("---")) {
@@ -47,6 +58,12 @@ export function parseMarkdownWithFrontmatter(content: string): ParsedMarkdown {
   return { frontmatter, body };
 }
 
+/**
+ * Render a frontmatter object back into a `---` delimited string.
+ *
+ * @param fm - The frontmatter key-value pairs.
+ * @returns A formatted frontmatter block.
+ */
 export function renderMarkdownFrontmatter(fm: MarkdownFrontmatter): string {
   const lines = Object.entries(fm).map(([k, v]) => `${k}: ${v}`);
   return `---\n${lines.join("\n")}\n---`;

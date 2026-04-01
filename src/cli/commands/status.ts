@@ -2,8 +2,13 @@ import { join } from "node:path";
 import { loadConfig } from "../../config/index.js";
 import { listSessions } from "../../harness/index.js";
 import { listTmuxSessions } from "../../team/index.js";
+import { discoverPlugins } from "../../plugins/index.js";
 import { logger } from "../../utils/index.js";
 
+/**
+ * Display an overview of active sessions, team sessions,
+ * discovered plugins, and current configuration.
+ */
 export async function statusCommand(): Promise<void> {
   const config = await loadConfig();
   const stateDir = join(process.cwd(), config.stateDir);
@@ -37,6 +42,15 @@ export async function statusCommand(): Promise<void> {
     }
   } catch {
     console.log("\n  Team mode: tmux not available");
+  }
+
+  // Plugins
+  const plugins = await discoverPlugins();
+  if (plugins.length > 0) {
+    console.log(`\n  Plugins: ${plugins.length}`);
+    for (const p of plugins) {
+      console.log(`    - [${p.kind}] ${p.name} (${p.filePath})`);
+    }
   }
 
   // Config summary

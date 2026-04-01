@@ -7,6 +7,15 @@ import { listSessions } from "../harness/index.js";
 import { getVersion } from "../utils/index.js";
 import { join } from "node:path";
 
+/**
+ * Create and configure the MCP server instance.
+ *
+ * Exposes resources for sessions and memory, and tools for CRUD
+ * operations on the memory store and session listing.
+ *
+ * @param stateDir - Absolute path to the `.qwen-pilot` state directory.
+ * @returns A configured (but not yet connected) {@link McpServer}.
+ */
 export function createMcpServer(stateDir: string): McpServer {
   const server = new McpServer({
     name: "qwen-pilot",
@@ -139,6 +148,11 @@ export function createMcpServer(stateDir: string): McpServer {
   return server;
 }
 
+/**
+ * Start the MCP server on stdio transport.
+ *
+ * This is the entry point for `qp mcp`.
+ */
 export async function startMcpServer(): Promise<void> {
   const config = await loadConfig();
   const stateDir = join(process.cwd(), config.stateDir);

@@ -11,14 +11,26 @@ import {
 } from "../../team/index.js";
 import { loadAgentDefinition, resolveModelForRole } from "../../agents/index.js";
 import { hookManager } from "../../hooks/index.js";
+import { QwenPilotError } from "../../errors/index.js";
 import { logger } from "../../utils/index.js";
 import { initializeStateDir } from "../../state/index.js";
 
-interface TeamOptions {
+/** Options accepted by the `team` command. */
+export interface TeamOptions {
   role?: string;
   task?: string;
+  dryRun?: boolean;
 }
 
+/**
+ * Launch a multi-agent team coordinated through tmux.
+ *
+ * When `--dry-run` is set, the command prints the planned tmux layout,
+ * worker configuration, and commands without creating any sessions.
+ *
+ * @param countStr - Number of workers (from CLI argument).
+ * @param options  - CLI flags parsed by Commander.
+ */
 export async function teamCommand(countStr: string, options: TeamOptions): Promise<void> {
   const count = parseInt(countStr, 10);
   if (isNaN(count) || count < 1) {
@@ -27,6 +39,41 @@ export async function teamCommand(countStr: string, options: TeamOptions): Promi
   }
 
   const config = await loadConfig();
+  const role = options.role ?? "executor";
+
+  // --- dry-run mode ---
+  if (options.dryRun) {
+    const session = createTeamSession(config, count);
+    const agentDef = await loadAgentDefinition(role);
+
+    logger.banner("DRY RUN — team");
+    logger.info(`Session:  ${session.id}`);
+    logger.info(`Workers:  ${session.config.maxWorkers}`);
+    logger.info(`Role:     ${role}`);
+
+    if (agentDef) {
+      const model = resolveModelForRole(agentDef.role, config.models);
+      logger.info(`Model:    ${model}`);
+      logger.info(`Agent:    ${agentDef.role.name} — ${agentDef.role.description}`);
+    }
+
+    logger.info(`\nTmux session: ${session.tmuxSession}`);
+    for (let i = 0; i < session.config.maxWorkers; i++) {
+      const paneId = i === 0 ? `${session.tmuxSession}:0.0` : `${session.tmuxSession}:0.${i}`;
+      const model = agentDef
+        ? resolveModelForRole(agentDef.role, config.models)
+        : config.models.balanced;
+      logger.info(`  Pane ${paneId}: qwen --model ${model}`);
+    }
+
+    if (options.task) {
+      logger.info(`\nInitial task: ${options.task}`);
+    }
+
+    logger.info("\nNo changes were made (dry-run).");
+    return;
+  }
+
   const stateDir = join(process.cwd(), config.stateDir);
   const store = await initializeStateDir(stateDir);
 
@@ -35,13 +82,9 @@ export async function teamCommand(countStr: string, options: TeamOptions): Promi
   // Check tmux
   const hasTmux = await checkTmuxAvailable();
   if (!hasTmux) {
-    logger.error("tmux is required for team mode. Install tmux and try again.");
-    logger.info("  macOS:  brew install tmux");
-    logger.info("  Ubuntu: sudo apt install tmux");
-    process.exit(1);
+    throw new QwenPilotError("QP_006");
   }
 
-  const role = options.role ?? "executor";
   const session = createTeamSession(config, count);
 
   logger.info(`Team session: ${session.id}`);

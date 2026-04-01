@@ -10,6 +10,8 @@ import { workflowsListCommand, workflowsShowCommand, workflowsRunCommand } from 
 import { doctorCommand } from "./commands/doctor.js";
 import { configShowCommand, configValidateCommand } from "./commands/config-cmd.js";
 import { statusCommand } from "./commands/status.js";
+import { benchmarkCommand } from "./commands/benchmark.js";
+import { initCommand } from "./commands/init.js";
 import { startMcpServer } from "../mcp/index.js";
 import { getVersion } from "../utils/index.js";
 
@@ -26,6 +28,13 @@ program
   .description("Initialize qwen-pilot in the current project")
   .action(setupCommand);
 
+// init
+program
+  .command("init")
+  .description("Initialize project with a pre-configured template")
+  .option("--template <template>", "Template to use: node, python, fullstack", "node")
+  .action((opts) => initCommand({ template: opts.template }));
+
 // harness
 program
   .command("harness")
@@ -34,7 +43,16 @@ program
   .option("--balanced", "Use balanced-tier model (qwen-plus)")
   .option("--turbo", "Use fast-tier model (qwen-turbo)")
   .option("--sandbox-mode <mode>", "Sandbox mode: full, relaxed, none")
-  .action((opts) => harnessCommand({ max: opts.max, balanced: opts.balanced, turbo: opts.turbo, sandbox: opts.sandboxMode }));
+  .option("--dry-run", "Show what would happen without executing")
+  .action((opts) =>
+    harnessCommand({
+      max: opts.max,
+      balanced: opts.balanced,
+      turbo: opts.turbo,
+      sandbox: opts.sandboxMode,
+      dryRun: opts.dryRun,
+    }),
+  );
 
 // team
 program
@@ -42,7 +60,8 @@ program
   .description("Launch multi-agent team with tmux")
   .option("--role <role>", "Agent role for workers", "executor")
   .option("--task <task>", "Initial task description")
-  .action(teamCommand);
+  .option("--dry-run", "Show what would happen without executing")
+  .action((count, opts) => teamCommand(count, { role: opts.role, task: opts.task, dryRun: opts.dryRun }));
 
 // ask
 program
@@ -50,7 +69,8 @@ program
   .description("Single-shot query to Qwen")
   .option("--model <model>", "Model override")
   .option("--role <role>", "Agent role to use")
-  .action(askCommand);
+  .option("--dry-run", "Show what would happen without executing")
+  .action((prompt, opts) => askCommand(prompt, { model: opts.model, role: opts.role, dryRun: opts.dryRun }));
 
 // prompts
 const promptsCmd = program.command("prompts").description("Manage agent prompts");
@@ -82,7 +102,14 @@ workflowsCmd
   .command("run <name>")
   .description("Run a workflow")
   .argument("[context]", "Additional context for the workflow")
-  .action(workflowsRunCommand);
+  .option("--dry-run", "Show what would happen without executing")
+  .action((name, context, opts) => workflowsRunCommand(name, context, { dryRun: opts.dryRun }));
+
+// benchmark
+program
+  .command("benchmark <prompt>")
+  .description("Run same prompt across all 3 model tiers and compare")
+  .action(benchmarkCommand);
 
 // doctor
 program

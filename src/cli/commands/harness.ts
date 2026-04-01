@@ -3,15 +3,26 @@ import { spawn } from "node:child_process";
 import { loadConfig, type ModelTier } from "../../config/index.js";
 import { createSession, buildSessionArgs, buildContextInjection, loadAgentsFile, saveSession } from "../../harness/index.js";
 import { hookManager } from "../../hooks/index.js";
+import { createMetricsTracker } from "../../metrics/index.js";
 import { logger, commandExists } from "../../utils/index.js";
 
-interface HarnessOptions {
+/** Options accepted by the `harness` command. */
+export interface HarnessOptions {
   max?: boolean;
   balanced?: boolean;
   turbo?: boolean;
   sandbox?: string;
+  dryRun?: boolean;
 }
 
+/**
+ * Launch an enhanced interactive Qwen CLI session.
+ *
+ * When `--dry-run` is set the command prints the full session
+ * configuration and argument list without spawning a process.
+ *
+ * @param options - CLI flags parsed by Commander.
+ */
 export async function harnessCommand(options: HarnessOptions): Promise<void> {
   const config = await loadConfig();
 
@@ -31,21 +42,40 @@ export async function harnessCommand(options: HarnessOptions): Promise<void> {
 
   const session = createSession(config, tier);
   const stateDir = join(process.cwd(), config.stateDir);
+  const metrics = createMetricsTracker(session.model);
+
+  // Load AGENTS.md context
+  const agentsContent = await loadAgentsFile();
+  if (agentsContent) {
+    session.context.push("AGENTS.md loaded");
+  }
+
+  const contextInjection = buildContextInjection(session, agentsContent ?? undefined);
+  const args = buildSessionArgs(session, config);
+
+  // --- dry-run mode ---
+  if (options.dryRun) {
+    logger.banner("DRY RUN — harness");
+    logger.info(`Session:  ${session.id}`);
+    logger.info(`Model:    ${session.model} (Tier: ${session.tier})`);
+    logger.info(`Sandbox:  ${session.sandboxMode}`);
+    logger.info(`State:    ${stateDir}`);
+    logger.info(`\nCommand that would execute:`);
+    logger.info(`  qwen ${args.join(" ")}`);
+    logger.info(`\nContext injection:`);
+    console.log(contextInjection);
+    logger.info("\nNo changes were made (dry-run).");
+    return;
+  }
 
   logger.banner("qwen-pilot harness");
   logger.info(`Session: ${session.id}`);
   logger.info(`Model: ${session.model} (Tier: ${session.tier})`);
   logger.info(`Sandbox: ${session.sandboxMode}`);
 
-  // Load AGENTS.md context
-  const agentsContent = await loadAgentsFile();
   if (agentsContent) {
     logger.success("Loaded AGENTS.md context");
-    session.context.push("AGENTS.md loaded");
   }
-
-  const contextInjection = buildContextInjection(session, agentsContent ?? undefined);
-  const args = buildSessionArgs(session, config);
 
   // Check for qwen CLI
   const hasQwen = await commandExists("qwen");

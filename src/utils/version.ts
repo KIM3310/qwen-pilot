@@ -4,6 +4,13 @@ import { fileURLToPath } from "node:url";
 
 let cachedVersion: string | null = null;
 
+/**
+ * Read the package version from `package.json`.
+ *
+ * The result is cached after the first call.
+ *
+ * @returns The semver version string (e.g. `"1.0.0"`).
+ */
 export function getVersion(): string {
   if (cachedVersion) return cachedVersion;
 

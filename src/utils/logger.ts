@@ -1,3 +1,4 @@
+/** Numeric log levels from most to least verbose. */
 export enum LogLevel {
   DEBUG = 0,
   INFO = 1,
@@ -25,9 +26,14 @@ const LEVEL_COLORS: Record<LogLevel, string> = {
 const RESET = "\x1b[0m";
 const BOLD = "\x1b[1m";
 
+/**
+ * Structured logger that writes to stderr with ANSI colour and
+ * timestamp prefixes.
+ */
 class Logger {
   private level: LogLevel = LogLevel.INFO;
 
+  /** Set the minimum log level. Messages below this are suppressed. */
   setLevel(level: LogLevel): void {
     this.level = level;
   }
@@ -41,30 +47,37 @@ class Logger {
     console.error(prefix, message, ...args);
   }
 
+  /** Log a debug-level message. */
   debug(message: string, ...args: unknown[]): void {
     this.log(LogLevel.DEBUG, message, ...args);
   }
 
+  /** Log an info-level message. */
   info(message: string, ...args: unknown[]): void {
     this.log(LogLevel.INFO, message, ...args);
   }
 
+  /** Log a warning-level message. */
   warn(message: string, ...args: unknown[]): void {
     this.log(LogLevel.WARN, message, ...args);
   }
 
+  /** Log an error-level message. */
   error(message: string, ...args: unknown[]): void {
     this.log(LogLevel.ERROR, message, ...args);
   }
 
+  /** Print a green checkmark success line. */
   success(message: string): void {
     console.error(`${BOLD}\x1b[32m✓${RESET} ${message}`);
   }
 
+  /** Print a cyan arrow step indicator. */
   step(message: string): void {
     console.error(`${BOLD}\x1b[36m→${RESET} ${message}`);
   }
 
+  /** Print a prominent banner with a horizontal rule. */
   banner(title: string): void {
     const line = "─".repeat(Math.max(title.length + 4, 40));
     console.error(`\n${BOLD}\x1b[36m${line}${RESET}`);
@@ -73,4 +86,5 @@ class Logger {
   }
 }
 
+/** Shared singleton logger instance. */
 export const logger = new Logger();

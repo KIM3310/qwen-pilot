@@ -1,11 +1,23 @@
 import { execFile, spawn, type ChildProcess } from "node:child_process";
 
+/** Result of executing an external command. */
 export interface ExecResult {
+  /** Standard output. */
   stdout: string;
+  /** Standard error. */
   stderr: string;
+  /** Process exit code (`0` on success). */
   exitCode: number;
 }
 
+/**
+ * Execute a command and capture its output.
+ *
+ * @param cmd  - The executable name or path.
+ * @param args - Arguments to pass.
+ * @param cwd  - Optional working directory.
+ * @returns An {@link ExecResult} (never rejects).
+ */
 export function exec(cmd: string, args: string[], cwd?: string): Promise<ExecResult> {
   return new Promise((resolve) => {
     execFile(cmd, args, { cwd, timeout: 30000 }, (error, stdout, stderr) => {
@@ -18,6 +30,15 @@ export function exec(cmd: string, args: string[], cwd?: string): Promise<ExecRes
   });
 }
 
+/**
+ * Spawn a detached child process that continues running after the
+ * parent exits.
+ *
+ * @param cmd  - The executable name or path.
+ * @param args - Arguments to pass.
+ * @param opts - Optional working directory and extra environment.
+ * @returns The unref'd child process handle.
+ */
 export function spawnDetached(
   cmd: string,
   args: string[],
@@ -33,6 +54,12 @@ export function spawnDetached(
   return child;
 }
 
+/**
+ * Check whether an executable is available on `$PATH`.
+ *
+ * @param cmd - The command name to look up.
+ * @returns `true` if the command was found.
+ */
 export async function commandExists(cmd: string): Promise<boolean> {
   const isWindows = process.platform === "win32";
   const checkCmd = isWindows ? "where" : "which";
