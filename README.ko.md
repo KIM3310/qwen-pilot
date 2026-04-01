@@ -1,5 +1,7 @@
 # qwen-pilot
 
+[English](README.md) | [한국어](README.ko.md)
+
 Alibaba Qwen CLI를 위한 멀티 에이전트 오케스트레이션 하네스. 프롬프트 관리, 워크플로우 실행, 팀 협업 기능을 제공합니다.
 
 ## 주요 기능
