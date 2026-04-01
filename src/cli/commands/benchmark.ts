@@ -20,7 +20,7 @@ interface BenchmarkResult {
  *
  * @param prompt - The prompt to benchmark.
  */
-export async function benchmarkCommand(prompt: string): Promise<void> {
+export async function benchmarkCommand(prompt: string, options?: { dryRun?: boolean }): Promise<void> {
   if (!prompt || prompt.trim().length === 0) {
     logger.error("Prompt cannot be empty");
     process.exit(1);
@@ -38,8 +38,13 @@ export async function benchmarkCommand(prompt: string): Promise<void> {
     { tier: "fast", label: "turbo" },
   ];
 
-  const hasQwen = await commandExists("qwen");
+  const dryRun = options?.dryRun ?? false;
+  const hasQwen = dryRun ? false : await commandExists("qwen");
   const results: BenchmarkResult[] = [];
+
+  if (dryRun) {
+    logger.info("[DRY RUN] Showing planned benchmark configuration:\n");
+  }
 
   for (const { tier, label } of tiers) {
     const session = createSession(config, tier);
@@ -110,6 +115,8 @@ export async function benchmarkCommand(prompt: string): Promise<void> {
   if (successful.length > 0) {
     const fastest = successful.reduce((a, b) => (a.latencyMs < b.latencyMs ? a : b));
     console.log(`\n  Fastest: ${fastest.tier} (${fastest.model}) at ${(fastest.latencyMs / 1000).toFixed(2)}s`);
+  } else if (dryRun) {
+    logger.info("\nNo changes were made (dry-run).");
   } else if (!hasQwen) {
     logger.warn("\nQwen CLI not found. Install it to run real benchmarks.");
     logger.info("Results above show the planned configuration for each tier.");

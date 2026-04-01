@@ -109,7 +109,8 @@ workflowsCmd
 program
   .command("benchmark <prompt>")
   .description("Run same prompt across all 3 model tiers and compare")
-  .action(benchmarkCommand);
+  .option("--dry-run", "Show what would be executed without running")
+  .action((prompt, opts) => benchmarkCommand(prompt, { dryRun: opts.dryRun }));
 
 // doctor
 program
