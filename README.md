@@ -95,6 +95,40 @@ qp team 3 --role executor --task "Implement feature X"
 | `qp hud` | Show real-time session HUD |
 | `qp hud --watch` | Live-updating HUD (refreshes every 2s) |
 | `qp hud --compact` | Single-line output (tmux-friendly) |
+| `qp tool-bench` | Run BFCL-style tool-call reliability benchmark |
+
+## Tool-Reliability Middleware
+
+Robust parsing, schema coercion, and bounded retry for LLM tool calls. Improves tool-call success rates by 10-12% over naive JSON.parse.
+
+```bash
+# Run the benchmark to see baseline vs middleware comparison
+qp tool-bench
+```
+
+**Modules:**
+
+- **rjson** -- Recovers JSON from trailing commas, single quotes, unquoted keys, comments, missing brackets, and markdown wrapping
+- **schema-coerce** -- Coerces string-to-number, string-to-boolean, value-to-array, snake_case/camelCase key normalization, and enum matching
+- **parser** -- Extracts tool calls from JSON, XML (`<tool_call>`), and markdown-fenced formats with validation
+- **retry** -- Bounded retry with exponential backoff and error-context feedback for re-prompting
+- **middleware** -- Integration layer (`executeWithToolReliability`) that wraps any LLM call
+
+**Programmatic usage:**
+
+```typescript
+import { executeWithToolReliability, parseToolCalls, rjsonParse } from "qwen-pilot";
+
+// Full middleware pipeline
+const result = await executeWithToolReliability(prompt, tools, llmCall, {
+  retry: { maxRetries: 3 },
+  coercion: { normalizeKeys: true },
+});
+
+// Or use individual components
+const parsed = parseToolCalls(rawOutput, tools);
+const json = rjsonParse(malformedJson);
+```
 
 ## HUD (Heads-Up Display)
 

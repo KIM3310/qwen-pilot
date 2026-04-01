@@ -13,3 +13,29 @@ export { QwenPilotError, ERROR_CODES, formatErrorCode, type ErrorCode } from "./
 export { createMetricsTracker, MetricsTracker, type SessionMetrics } from "./metrics/index.js";
 export { discoverPlugins, getPluginDir, buildPromptSearchDirs, buildWorkflowSearchDirs, type PluginEntry } from "./plugins/index.js";
 export { renderHud, renderHudFull, formatDuration, formatNumber, type HudState } from "./hud/index.js";
+export {
+  rjsonParse,
+  extractJsonSubstring,
+  repairJson,
+  coerceToSchema,
+  parseToolCalls,
+  retryWithBackoff,
+  buildCorrectionPrompt,
+  executeWithToolReliability,
+  runBenchmark,
+  formatBenchmarkTable,
+  BENCHMARK_CASES,
+  type RJsonOptions,
+  type SimpleSchema,
+  type CoerceOptions,
+  type ToolDefinition,
+  type ParsedToolCall,
+  type ParseResult,
+  type RetryConfig,
+  type RetryMetrics,
+  type ToolReliabilityConfig,
+  type ToolCallResult,
+  type LlmCallFn,
+  type BenchmarkCase,
+  type BenchmarkSummary,
+} from "./tool-reliability/index.js";

@@ -13,6 +13,7 @@ import { statusCommand } from "./commands/status.js";
 import { benchmarkCommand } from "./commands/benchmark.js";
 import { initCommand } from "./commands/init.js";
 import { hudCommand } from "./commands/hud.js";
+import { toolBenchCommand } from "./commands/tool-bench.js";
 import { startMcpServer } from "../mcp/index.js";
 import { getVersion } from "../utils/index.js";
 
@@ -145,6 +146,12 @@ program
   .command("status")
   .description("Show active sessions and status")
   .action(statusCommand);
+
+// tool-bench
+program
+  .command("tool-bench")
+  .description("Run BFCL-style tool-call reliability benchmark")
+  .action(toolBenchCommand);
 
 // mcp (hidden — invoked by MCP clients)
 program
