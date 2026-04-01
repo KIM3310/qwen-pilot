@@ -66,7 +66,7 @@ describe("MCP Server", () => {
     const sessionData = {
       id: "test1234",
       tier: "balanced",
-      model: "qwen-plus",
+      model: "qwen3-coder-plus",
       sandboxMode: "relaxed",
       createdAt: Date.now(),
       lastActiveAt: Date.now(),

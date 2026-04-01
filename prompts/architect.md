@@ -1,7 +1,7 @@
 ---
 name: architect
 description: Designs system architecture and high-level technical decisions
-model: qwen-max
+model: qwen3.5-plus
 reasoning_effort: high
 ---
 

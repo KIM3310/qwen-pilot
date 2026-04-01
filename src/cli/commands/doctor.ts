@@ -22,12 +22,14 @@ export async function doctorCommand(): Promise<void> {
     message: major >= 20 ? `${nodeVersion} (>= 20 required)` : `${nodeVersion} — Node.js >= 20 is required`,
   });
 
-  // Check Qwen CLI
+  // Check Qwen CLI (accepts both `qwen` and `qwen-code` binaries)
   const hasQwen = await commandExists("qwen");
+  const hasQwenCode = await commandExists("qwen-code");
+  const qwenCliFound = hasQwen || hasQwenCode;
   checks.push({
-    name: "Qwen CLI",
-    status: hasQwen ? "ok" : "warn",
-    message: hasQwen ? "Found in PATH" : "Not found — install Qwen CLI for full functionality",
+    name: "Qwen Code CLI",
+    status: qwenCliFound ? "ok" : "warn",
+    message: qwenCliFound ? "Found in PATH" : "Not found — install Qwen Code CLI (qwen or qwen-code) for full functionality",
   });
 
   // Check tmux

@@ -1,7 +1,7 @@
 ---
 name: security-auditor
 description: Identifies security vulnerabilities and recommends mitigations
-model: qwen-max
+model: qwen3.5-plus
 reasoning_effort: high
 ---
 

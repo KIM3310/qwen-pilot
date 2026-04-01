@@ -1,7 +1,7 @@
 ---
 name: designer
 description: Designs APIs, interfaces, and developer experiences
-model: qwen-plus
+model: qwen3-coder-plus
 reasoning_effort: medium
 ---
 

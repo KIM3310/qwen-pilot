@@ -115,15 +115,15 @@ echo   [OK] Using: !PIP_CMD!
 :: STEP 3 — Qwen CLI (dashscope)
 :: ═══════════════════════════════════════════════════════════
 echo.
-echo   [3/7] Checking Qwen CLI...
+echo   [3/7] Checking Qwen Code CLI...
 echo   ---------------------------------
 
-where qwen >nul 2>nul
+where qwen >nul 2>nul || where qwen-code >nul 2>nul
 if !ERRORLEVEL! equ 0 (
-    echo   [OK] Qwen CLI already installed
+    echo   [OK] Qwen Code CLI already installed
 ) else (
     if defined PIP_CMD (
-        echo   Installing Qwen CLI (dashscope via pip)...
+        echo   Installing Qwen Code CLI (dashscope via pip)...
         !PIP_CMD! install dashscope 2>nul
         if !ERRORLEVEL! equ 0 (
             echo   [OK] dashscope package installed

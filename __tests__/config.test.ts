@@ -5,9 +5,9 @@ import { validateConfig, getUserConfigPath, getProjectConfigPath } from "../src/
 describe("QwenPilotConfigSchema", () => {
   it("should produce valid defaults when parsing empty object", () => {
     const config = QwenPilotConfigSchema.parse({});
-    expect(config.models.high).toBe("qwen-max");
-    expect(config.models.balanced).toBe("qwen-plus");
-    expect(config.models.fast).toBe("qwen-turbo");
+    expect(config.models.high).toBe("qwen3.5-plus");
+    expect(config.models.balanced).toBe("qwen3-coder-plus");
+    expect(config.models.fast).toBe("qwen3-coder-next");
     expect(config.harness.defaultTier).toBe("balanced");
     expect(config.harness.sandboxMode).toBe("relaxed");
     expect(config.team.maxWorkers).toBe(4);
@@ -16,10 +16,10 @@ describe("QwenPilotConfigSchema", () => {
 
   it("should accept custom model names", () => {
     const config = QwenPilotConfigSchema.parse({
-      models: { high: "qwen-max-latest", balanced: "qwen-plus-0125", fast: "qwen-turbo-latest" },
+      models: { high: "qwen3.5-plus-latest", balanced: "qwen3-coder-plus-0125", fast: "qwen3-coder-next-latest" },
     });
-    expect(config.models.high).toBe("qwen-max-latest");
-    expect(config.models.balanced).toBe("qwen-plus-0125");
+    expect(config.models.high).toBe("qwen3.5-plus-latest");
+    expect(config.models.balanced).toBe("qwen3-coder-plus-0125");
   });
 
   it("should reject invalid sandbox mode", () => {

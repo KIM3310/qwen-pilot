@@ -1,7 +1,7 @@
 ---
 name: executor
 description: Implements code changes efficiently following specifications
-model: qwen-plus
+model: qwen3-coder-plus
 reasoning_effort: medium
 ---
 

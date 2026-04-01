@@ -1,7 +1,7 @@
 ---
 name: planner
 description: Creates detailed implementation plans and task breakdowns
-model: qwen-max
+model: qwen3.5-plus
 reasoning_effort: high
 ---
 

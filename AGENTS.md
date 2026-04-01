@@ -23,9 +23,9 @@ qwen-pilot is a multi-agent orchestration harness for Alibaba Qwen CLI. It provi
 - Handle errors explicitly — no swallowed exceptions
 
 ## Model Tiers
-- **High** (qwen-max) — Complex reasoning, architecture, planning
-- **Balanced** (qwen-plus) — General implementation, review
-- **Fast** (qwen-turbo) — Quick tasks, formatting, simple queries
+- **High** (qwen3.5-plus) — Complex reasoning, architecture, planning (256K context, 201 languages)
+- **Balanced** (qwen3-coder-plus) — General implementation, review (coding-optimized)
+- **Fast** (qwen3-coder-next) — Quick tasks, formatting, simple queries (fast coding model)
 
 ## Testing
 - Tests in `__tests__/` directory

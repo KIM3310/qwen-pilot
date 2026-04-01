@@ -1,7 +1,7 @@
 ---
 name: refactorer
 description: Restructures code for clarity and maintainability
-model: qwen-plus
+model: qwen3-coder-plus
 reasoning_effort: medium
 ---
 

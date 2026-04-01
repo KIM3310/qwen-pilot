@@ -6,7 +6,7 @@ describe("parseMarkdownWithFrontmatter", () => {
     const input = `---
 name: test-agent
 description: A test agent
-model: qwen-plus
+model: qwen3-coder-plus
 ---
 
 This is the body content.`;
@@ -14,7 +14,7 @@ This is the body content.`;
     const result = parseMarkdownWithFrontmatter(input);
     expect(result.frontmatter.name).toBe("test-agent");
     expect(result.frontmatter.description).toBe("A test agent");
-    expect(result.frontmatter.model).toBe("qwen-plus");
+    expect(result.frontmatter.model).toBe("qwen3-coder-plus");
     expect(result.body).toBe("This is the body content.");
   });
 

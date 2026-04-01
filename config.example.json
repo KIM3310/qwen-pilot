@@ -3,9 +3,9 @@
 
   "models": {
     "_comment": "Model identifiers for each performance tier",
-    "high": "qwen-max",
-    "balanced": "qwen-plus",
-    "fast": "qwen-turbo"
+    "high": "qwen3.5-plus",
+    "balanced": "qwen3-coder-plus",
+    "fast": "qwen3-coder-next"
   },
 
   "harness": {
@@ -14,7 +14,7 @@
     "sandboxMode": "relaxed",
     "maxTokens": 8192,
     "temperature": 0.7,
-    "contextWindow": 32768
+    "contextWindow": 262144
   },
 
   "team": {

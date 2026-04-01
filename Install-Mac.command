@@ -125,11 +125,11 @@ fi
 # ═════════════════════════════════════════════════════════════
 # STEP 3 — Qwen CLI (dashscope via pip)
 # ═════════════════════════════════════════════════════════════
-step "3/7  Checking Qwen CLI..."
-if command -v qwen &>/dev/null; then
-  ok "Qwen CLI already installed"
+step "3/7  Checking Qwen Code CLI..."
+if command -v qwen &>/dev/null || command -v qwen-code &>/dev/null; then
+  ok "Qwen Code CLI already installed"
 else
-  info "Installing Qwen CLI (dashscope via pip)..."
+  info "Installing Qwen Code CLI (dashscope via pip)..."
   if run_pip install dashscope 2>/dev/null; then
     ok "dashscope package installed"
   else

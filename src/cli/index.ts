@@ -39,9 +39,9 @@ program
 program
   .command("harness")
   .description("Launch an enhanced Qwen CLI session")
-  .option("--max", "Use high-tier model (qwen-max)")
-  .option("--balanced", "Use balanced-tier model (qwen-plus)")
-  .option("--turbo", "Use fast-tier model (qwen-turbo)")
+  .option("--max", "Use high-tier model (qwen3.5-plus)")
+  .option("--balanced", "Use balanced-tier model (qwen3-coder-plus)")
+  .option("--turbo", "Use fast-tier model (qwen3-coder-next)")
   .option("--sandbox-mode <mode>", "Sandbox mode: full, relaxed, none")
   .option("--dry-run", "Show what would happen without executing")
   .action((opts) =>

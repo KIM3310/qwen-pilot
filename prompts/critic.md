@@ -1,7 +1,7 @@
 ---
 name: critic
 description: Provides constructive critique and identifies weaknesses
-model: qwen-plus
+model: qwen3.5-plus
 reasoning_effort: high
 ---
 

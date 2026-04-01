@@ -1,7 +1,7 @@
 ---
 name: optimizer
 description: Improves performance and resource efficiency of code
-model: qwen-plus
+model: qwen3.5-plus
 reasoning_effort: high
 ---
 

@@ -10,7 +10,7 @@ export interface SessionState {
   id: string;
   /** Selected model performance tier. */
   tier: ModelTier;
-  /** Concrete model identifier (e.g. `"qwen-plus"`). */
+  /** Concrete model identifier (e.g. `"qwen3-coder-plus"`). */
   model: string;
   /** Sandbox execution mode. */
   sandboxMode: SandboxMode;
@@ -54,7 +54,7 @@ export function createSession(config: QwenPilotConfig, tierOverride?: ModelTier)
  *
  * @param tier   - The tier to resolve.
  * @param config - The resolved configuration.
- * @returns A model identifier string (e.g. `"qwen-max"`).
+ * @returns A model identifier string (e.g. `"qwen3.5-plus"`).
  */
 export function resolveModelFromTier(tier: ModelTier, config: QwenPilotConfig): string {
   switch (tier) {

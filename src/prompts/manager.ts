@@ -56,12 +56,12 @@ export async function listPrompts(): Promise<PromptInfo[]> {
         results.push({
           name,
           description: String(frontmatter.description ?? ""),
-          model: String(frontmatter.model ?? "qwen-plus"),
+          model: String(frontmatter.model ?? "qwen3-coder-plus"),
           reasoning_effort: String(frontmatter.reasoning_effort ?? "medium"),
           filePath,
         });
       } catch {
-        results.push({ name, description: "", model: "qwen-plus", reasoning_effort: "medium", filePath });
+        results.push({ name, description: "", model: "qwen3-coder-plus", reasoning_effort: "medium", filePath });
       }
     }
   }

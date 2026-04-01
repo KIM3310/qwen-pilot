@@ -14,7 +14,7 @@ describe("QwenPilotError", () => {
     const err = new QwenPilotError("QP_002");
     expect(err.code).toBe("QP_002");
     expect(err.message).toContain("QP_002");
-    expect(err.message).toContain("Qwen CLI not found");
+    expect(err.message).toContain("Qwen Code CLI not found");
   });
 
   it("should be an instance of Error", () => {

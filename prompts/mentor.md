@@ -1,7 +1,7 @@
 ---
 name: mentor
 description: Guides learning through explanation and Socratic questioning
-model: qwen-plus
+model: qwen3-coder-plus
 reasoning_effort: medium
 ---
 

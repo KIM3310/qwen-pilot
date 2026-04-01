@@ -11,7 +11,7 @@ describe("createSession", () => {
   it("should create a session with balanced defaults", () => {
     const session = createSession(DEFAULT_CONFIG);
     expect(session.tier).toBe("balanced");
-    expect(session.model).toBe("qwen-plus");
+    expect(session.model).toBe("qwen3-coder-plus");
     expect(session.sandboxMode).toBe("relaxed");
     expect(session.promptCount).toBe(0);
     expect(session.context).toEqual([]);
@@ -21,21 +21,21 @@ describe("createSession", () => {
   it("should allow tier override", () => {
     const session = createSession(DEFAULT_CONFIG, "high");
     expect(session.tier).toBe("high");
-    expect(session.model).toBe("qwen-max");
+    expect(session.model).toBe("qwen3.5-plus");
   });
 
   it("should use fast tier when requested", () => {
     const session = createSession(DEFAULT_CONFIG, "fast");
     expect(session.tier).toBe("fast");
-    expect(session.model).toBe("qwen-turbo");
+    expect(session.model).toBe("qwen3-coder-next");
   });
 });
 
 describe("resolveModelFromTier", () => {
   it("should resolve all three tiers correctly", () => {
-    expect(resolveModelFromTier("high", DEFAULT_CONFIG)).toBe("qwen-max");
-    expect(resolveModelFromTier("balanced", DEFAULT_CONFIG)).toBe("qwen-plus");
-    expect(resolveModelFromTier("fast", DEFAULT_CONFIG)).toBe("qwen-turbo");
+    expect(resolveModelFromTier("high", DEFAULT_CONFIG)).toBe("qwen3.5-plus");
+    expect(resolveModelFromTier("balanced", DEFAULT_CONFIG)).toBe("qwen3-coder-plus");
+    expect(resolveModelFromTier("fast", DEFAULT_CONFIG)).toBe("qwen3-coder-next");
   });
 });
 
@@ -44,7 +44,7 @@ describe("buildSessionArgs", () => {
     const session = createSession(DEFAULT_CONFIG);
     const args = buildSessionArgs(session, DEFAULT_CONFIG);
     expect(args).toContain("--model");
-    expect(args).toContain("qwen-plus");
+    expect(args).toContain("qwen3-coder-plus");
   });
 
   it("should add --sandbox for full sandbox mode", () => {
@@ -75,7 +75,7 @@ describe("buildContextInjection", () => {
     const session = createSession(DEFAULT_CONFIG);
     const ctx = buildContextInjection(session);
     expect(ctx).toContain(session.id);
-    expect(ctx).toContain("qwen-plus");
+    expect(ctx).toContain("qwen3-coder-plus");
     expect(ctx).toContain("balanced");
   });
 

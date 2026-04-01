@@ -25,7 +25,7 @@ export interface SessionMetrics {
 /**
  * Create a new metrics tracker for one session.
  *
- * @param model - The model identifier (e.g. `"qwen-plus"`).
+ * @param model - The model identifier (e.g. `"qwen3-coder-plus"`).
  * @returns A {@link MetricsTracker} instance.
  */
 export function createMetricsTracker(model: string): MetricsTracker {

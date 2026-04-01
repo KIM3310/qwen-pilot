@@ -78,7 +78,7 @@ export async function listAgentDefinitions(searchDirs?: string[]): Promise<Agent
  */
 export function resolveModelForRole(role: AgentRole, models: { high: string; balanced: string; fast: string }): string {
   const modelName = role.model.toLowerCase();
-  if (modelName.includes("max") || modelName.includes("high")) return models.high;
-  if (modelName.includes("turbo") || modelName.includes("fast")) return models.fast;
+  if (modelName.includes("qwen3.5") || modelName.includes("max") || modelName.includes("high")) return models.high;
+  if (modelName.includes("coder-next") || modelName.includes("turbo") || modelName.includes("fast")) return models.fast;
   return models.balanced;
 }

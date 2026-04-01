@@ -74,18 +74,19 @@ export async function commandExists(cmd: string): Promise<boolean> {
  * @throws {Error} When `qwen` is not found.
  */
 export async function ensureQwenCli(): Promise<void> {
-  const found = await commandExists("qwen");
-  if (!found) {
+  const foundQwen = await commandExists("qwen");
+  const foundQwenCode = await commandExists("qwen-code");
+  if (!foundQwen && !foundQwenCode) {
     const msg = [
-      "[QP_002] Qwen CLI not found in PATH.",
+      "[QP_002] Qwen CLI (Qwen Code) not found in PATH.",
       "",
       "Install it before running this command (or use --dry-run to preview):",
       "",
-      "  pip install qwen-cli        # via pip",
-      "  brew install qwen-cli       # via Homebrew (macOS)",
-      "  npm install -g qwen-cli     # via npm",
+      "  pip install dashscope       # via pip (dashscope SDK)",
+      "  brew install qwen-code      # via Homebrew (macOS)",
+      "  npm install -g qwen-code    # via npm",
       "",
-      "After installing, verify with:  qwen --version",
+      "After installing, verify with:  qwen --version  or  qwen-code --version",
     ].join("\n");
     throw new Error(msg);
   }

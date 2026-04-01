@@ -100,9 +100,9 @@ qp team 3 --role executor --task "기능 X 구현"
 ```json
 {
   "models": {
-    "high": "qwen-max",
-    "balanced": "qwen-plus",
-    "fast": "qwen-turbo"
+    "high": "qwen3.5-plus",
+    "balanced": "qwen3-coder-plus",
+    "fast": "qwen3-coder-next"
   },
   "harness": {
     "defaultTier": "balanced",
@@ -128,9 +128,9 @@ qp team 3 --role executor --task "기능 X 구현"
 
 | 티어 | 기본 모델 | 용도 |
 |------|-----------|------|
-| High | qwen-max | 복잡한 추론, 아키텍처, 계획 |
-| Balanced | qwen-plus | 일반 구현, 리뷰 |
-| Fast | qwen-turbo | 빠른 작업, 포매팅, 간단한 쿼리 |
+| High | qwen3.5-plus | 복잡한 추론, 아키텍처, 계획 (256K 컨텍스트, 201개 언어) |
+| Balanced | qwen3-coder-plus | 일반 구현, 리뷰 (코딩 최적화) |
+| Fast | qwen3-coder-next | 빠른 작업, 포매팅, 간단한 쿼리 (빠른 코딩 모델) |
 
 ## 내장 에이전트 역할
 

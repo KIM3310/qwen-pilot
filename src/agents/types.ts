@@ -4,7 +4,7 @@ import { z } from "zod";
 export const AgentRoleSchema = z.object({
   name: z.string(),
   description: z.string(),
-  model: z.string().default("qwen-plus"),
+  model: z.string().default("qwen3-coder-plus"),
   reasoning_effort: z.enum(["low", "medium", "high"]).default("medium"),
   tags: z.array(z.string()).optional(),
 });

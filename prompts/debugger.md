@@ -1,7 +1,7 @@
 ---
 name: debugger
 description: Investigates and resolves bugs through systematic analysis
-model: qwen-max
+model: qwen3.5-plus
 reasoning_effort: high
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: analyst
 description: Analyzes codebases, metrics, and technical decisions
-model: qwen-plus
+model: qwen3-coder-plus
 reasoning_effort: high
 ---
 

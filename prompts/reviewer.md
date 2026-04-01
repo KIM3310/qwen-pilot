@@ -1,7 +1,7 @@
 ---
 name: reviewer
 description: Reviews code for quality, correctness, and best practices
-model: qwen-plus
+model: qwen3-coder-plus
 reasoning_effort: high
 ---
 

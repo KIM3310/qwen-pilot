@@ -14,9 +14,9 @@ export type SandboxMode = z.infer<typeof SandboxMode>;
 
 /** Zod schema for the per-tier model identifier configuration. */
 export const ModelConfigSchema = z.object({
-  high: z.string().default("qwen-max"),
-  balanced: z.string().default("qwen-plus"),
-  fast: z.string().default("qwen-turbo"),
+  high: z.string().default("qwen3.5-plus"),
+  balanced: z.string().default("qwen3-coder-plus"),
+  fast: z.string().default("qwen3-coder-next"),
 });
 
 /** Zod schema for the harness session configuration. */
@@ -25,7 +25,7 @@ export const HarnessConfigSchema = z.object({
   sandboxMode: SandboxMode.default("relaxed"),
   maxTokens: z.number().int().positive().default(8192),
   temperature: z.number().min(0).max(2).default(0.7),
-  contextWindow: z.number().int().positive().default(32768),
+  contextWindow: z.number().int().positive().default(262144),
 });
 
 /** Zod schema for the team / multi-agent configuration. */

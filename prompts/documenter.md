@@ -1,7 +1,7 @@
 ---
 name: documenter
 description: Creates clear technical documentation and API references
-model: qwen-plus
+model: qwen3-coder-plus
 reasoning_effort: medium
 ---
 

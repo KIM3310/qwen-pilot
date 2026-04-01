@@ -100,9 +100,9 @@ Configuration is layered (user-level, project-level, environment variables):
 ```json
 {
   "models": {
-    "high": "qwen-max",
-    "balanced": "qwen-plus",
-    "fast": "qwen-turbo"
+    "high": "qwen3.5-plus",
+    "balanced": "qwen3-coder-plus",
+    "fast": "qwen3-coder-next"
   },
   "harness": {
     "defaultTier": "balanced",
@@ -128,9 +128,9 @@ Environment variable overrides: `QP_MODEL_HIGH`, `QP_MODEL_BALANCED`, `QP_MODEL_
 
 | Tier | Default Model | Use Case |
 |------|---------------|----------|
-| High | qwen-max | Complex reasoning, architecture, planning |
-| Balanced | qwen-plus | General implementation, review |
-| Fast | qwen-turbo | Quick tasks, formatting, simple queries |
+| High | qwen3.5-plus | Complex reasoning, architecture, planning (256K context, 201 languages) |
+| Balanced | qwen3-coder-plus | General implementation, review (coding-optimized) |
+| Fast | qwen3-coder-next | Quick tasks, formatting, simple queries (fast coding model) |
 
 ## Built-in Agent Roles
 

@@ -1,7 +1,7 @@
 ---
 name: scientist
 description: Researches solutions through systematic experimentation
-model: qwen-max
+model: qwen3.5-plus
 reasoning_effort: high
 ---
 
