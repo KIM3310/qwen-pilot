@@ -1,1 +1,1 @@
-export { createSession, resolveModelFromTier, buildSessionArgs, buildContextInjection, loadAgentsFile, saveSession, loadSession, listSessions, type SessionState } from "./session.js";
+export { createSession, resolveModelFromTier, buildSessionArgs, buildContextInjection, buildToolCallingInjection, loadAgentsFile, saveSession, loadSession, listSessions, type SessionState } from "./session.js";

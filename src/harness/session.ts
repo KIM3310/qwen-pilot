@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { type QwenPilotConfig, type ModelTier, type SandboxMode } from "../config/index.js";
 import { readTextFile, writeJsonFile, readJsonFile, fileExists, ensureDir, logger } from "../utils/index.js";
 import { resolveModelForRole, type AgentDefinition } from "../agents/index.js";
+import { getPromptContent } from "../prompts/index.js";
 
 /** Persistent state for a single harness session. */
 export interface SessionState {
@@ -113,6 +114,30 @@ export function buildContextInjection(session: SessionState, agentsContent?: str
     parts.push(session.context.join("\n"));
   }
 
+  return parts.join("\n");
+}
+
+/**
+ * Build the tool-calling optimization context to append when tools are available.
+ *
+ * Loads the `tool-calling` prompt from the prompt system and returns it
+ * wrapped in a section header, or an empty string if not found.
+ *
+ * @param toolCount - Number of tools available in the current session.
+ * @returns A context string to append, or empty string.
+ */
+export async function buildToolCallingInjection(toolCount?: number): Promise<string> {
+  if (toolCount !== undefined && toolCount <= 0) return "";
+
+  const content = await getPromptContent("tool-calling");
+  if (!content) return "";
+
+  const parts: string[] = [];
+  parts.push("\n# Tool Calling Optimization\n");
+  if (toolCount !== undefined) {
+    parts.push(`Tools available: ${toolCount}\n`);
+  }
+  parts.push(content);
   return parts.join("\n");
 }
 

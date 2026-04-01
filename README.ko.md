@@ -136,6 +136,17 @@ qp team 3 --role executor --task "기능 X 구현"
 
 architect, planner, executor, debugger, reviewer, security-auditor, test-engineer, optimizer, documenter, designer, analyst, scientist, refactorer, critic, mentor
 
+## 도구 호출 최적화 (Tool Calling Optimization)
+
+15개 에이전트 프롬프트 모두 Qwen 모델의 첫 번째 호출 정확도를 위한 통합 도구 호출 프로토콜을 포함합니다. 각 프롬프트에는 다음이 포함됩니다:
+
+1. **도구 호출 프로토콜** — 엄격한 JSON 형식 규칙, 매개변수 타입 매칭, 필수 필드 적용, 오류 복구 절차
+2. **역할별 도구 가이드** — 각 에이전트의 일반적인 도구 사용에 대한 맥락적 지침 (예: debugger는 정규식 이스케이핑, executor는 파일 경로 검증, test-engineer는 어서션 타입 매칭)
+3. **구조적 사고 패턴** — 5단계 사전 호출 프로세스: 목표, 도구, 매개변수, 인수, 실행
+4. **BFCL 정렬 개선** — 매개변수 타입 어노테이션, 다단계 체인 가이드, 병렬 vs 순차 실행 결정, 선택적 매개변수 처리
+
+이 최적화는 일반적인 실패 모드(잘못된 매개변수 타입, 누락된 필수 필드, 잘못된 JSON, 불필요한 재시도)를 줄여 첫 번째 시도에서 올바른 도구 호출 생성을 10-12% 개선하는 것을 목표로 합니다.
+
 ## 내장 워크플로우
 
 autopilot, deep-plan, sprint, investigate, tdd, review-cycle, refactor, deploy-prep, interview, team-sync

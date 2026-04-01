@@ -1,7 +1,7 @@
 import { join } from "node:path";
 import { spawn } from "node:child_process";
 import { loadConfig, type ModelTier } from "../../config/index.js";
-import { createSession, buildSessionArgs, buildContextInjection, loadAgentsFile, saveSession } from "../../harness/index.js";
+import { createSession, buildSessionArgs, buildContextInjection, buildToolCallingInjection, loadAgentsFile, saveSession } from "../../harness/index.js";
 import { hookManager } from "../../hooks/index.js";
 import { createMetricsTracker } from "../../metrics/index.js";
 import { logger, ensureQwenCli } from "../../utils/index.js";
@@ -50,7 +50,13 @@ export async function harnessCommand(options: HarnessOptions): Promise<void> {
     session.context.push("AGENTS.md loaded");
   }
 
-  const contextInjection = buildContextInjection(session, agentsContent ?? undefined);
+  // Append tool-calling optimization prompt when tools may be used
+  const toolCallingContext = await buildToolCallingInjection();
+  if (toolCallingContext) {
+    session.context.push("tool-calling prompt loaded");
+  }
+
+  const contextInjection = buildContextInjection(session, agentsContent ?? undefined) + toolCallingContext;
   const args = buildSessionArgs(session, config);
 
   // --- dry-run mode ---

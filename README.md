@@ -201,6 +201,17 @@ Environment variable overrides: `QP_MODEL_HIGH`, `QP_MODEL_BALANCED`, `QP_MODEL_
 
 architect, planner, executor, debugger, reviewer, security-auditor, test-engineer, optimizer, documenter, designer, analyst, scientist, refactorer, critic, mentor
 
+## Tool Calling Optimization
+
+All 15 agent prompts include a unified tool-calling protocol designed for first-call accuracy with Qwen models. Each prompt contains:
+
+1. **Tool Calling Protocol** — Strict JSON format rules, parameter type matching, required field enforcement, and error recovery procedures
+2. **Role-Specific Tool Guidance** — Contextual instructions for each agent's typical tool usage (e.g., the debugger gets regex escaping rules, the executor gets file path verification, the test-engineer gets assertion type matching)
+3. **Structured Thinking Pattern** — A 5-step pre-call process: Goal, Tool, Parameters, Arguments, Execute
+4. **BFCL-Aligned Improvements** — Parameter type annotations, multi-step chain guidance, parallel vs sequential decision rules, and optional parameter handling
+
+These optimizations target a 10-12% improvement in correct tool-call generation on first attempt by reducing common failure modes: wrong parameter types, missing required fields, malformed JSON, and unnecessary retries.
+
 ## Built-in Workflows
 
 autopilot, deep-plan, sprint, investigate, tdd, review-cycle, refactor, deploy-prep, interview, team-sync
