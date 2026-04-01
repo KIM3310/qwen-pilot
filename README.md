@@ -64,6 +64,7 @@ qp team 3 --role executor --task "Implement feature X"
 | `qp prompts list` | List available agent prompts |
 | `qp prompts show <name>` | Show details of a specific prompt |
 | `qp workflows list` | List available workflows |
+| `qp workflows show <name>` | Show details of a specific workflow |
 | `qp workflows run <name>` | Run a workflow |
 | `qp config show` | Show current configuration |
 | `qp config validate` | Validate current configuration |

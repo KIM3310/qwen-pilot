@@ -6,7 +6,7 @@ import { harnessCommand } from "./commands/harness.js";
 import { teamCommand } from "./commands/team.js";
 import { askCommand } from "./commands/ask.js";
 import { promptsListCommand, promptsShowCommand } from "./commands/prompts-cmd.js";
-import { workflowsListCommand, workflowsRunCommand } from "./commands/workflows-cmd.js";
+import { workflowsListCommand, workflowsShowCommand, workflowsRunCommand } from "./commands/workflows-cmd.js";
 import { doctorCommand } from "./commands/doctor.js";
 import { configShowCommand, configValidateCommand } from "./commands/config-cmd.js";
 import { statusCommand } from "./commands/status.js";
@@ -71,6 +71,11 @@ workflowsCmd
   .command("list")
   .description("List available workflows")
   .action(workflowsListCommand);
+
+workflowsCmd
+  .command("show <name>")
+  .description("Show details of a specific workflow")
+  .action(workflowsShowCommand);
 
 workflowsCmd
   .command("run <name>")

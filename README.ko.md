@@ -64,6 +64,7 @@ qp team 3 --role executor --task "기능 X 구현"
 | `qp prompts list` | 사용 가능한 에이전트 프롬프트 목록 |
 | `qp prompts show <name>` | 특정 프롬프트 상세 정보 |
 | `qp workflows list` | 사용 가능한 워크플로우 목록 |
+| `qp workflows show <name>` | 특정 워크플로우 상세 정보 |
 | `qp workflows run <name>` | 워크플로우 실행 |
 | `qp config show` | 현재 설정 표시 |
 | `qp config validate` | 설정 유효성 검사 |
