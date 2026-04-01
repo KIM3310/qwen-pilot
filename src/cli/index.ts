@@ -150,8 +150,9 @@ program
 // tool-bench
 program
   .command("tool-bench")
-  .description("Run BFCL-style tool-call reliability benchmark")
-  .action(toolBenchCommand);
+  .description("Run tool-call reliability and prompt optimization benchmarks")
+  .option("--verbose", "Show detailed failure information")
+  .action((opts) => toolBenchCommand({ verbose: opts.verbose }));
 
 // mcp (hidden — invoked by MCP clients)
 program

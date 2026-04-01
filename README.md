@@ -95,7 +95,27 @@ qp team 3 --role executor --task "Implement feature X"
 | `qp hud` | Show real-time session HUD |
 | `qp hud --watch` | Live-updating HUD (refreshes every 2s) |
 | `qp hud --compact` | Single-line output (tmux-friendly) |
-| `qp tool-bench` | Run BFCL-style tool-call reliability benchmark |
+| `qp tool-bench` | Run tool-call reliability and prompt optimization benchmarks |
+| `qp tool-bench --verbose` | Show detailed failure information |
+
+## Tool-Calling Optimization
+
+A dedicated system prompt (`prompts/tool-calling.md`) optimized for Qwen models to improve tool-calling accuracy. Covers:
+
+- Strict JSON format rules with common mistake prevention
+- Parameter type enforcement (string, number, boolean, array, object, null, enum)
+- Required vs optional parameter handling
+- Parallel vs sequential multi-tool calling decisions
+- Error self-correction patterns
+- Pre-call verification checklist
+
+The prompt is automatically appended to harness sessions when tools are available. View it with:
+
+```bash
+qp prompts show tool-calling
+```
+
+The `qp tool-bench` command runs 20 prompt-level benchmark cases across 4 categories (simple, type-coercion, multi-param, multi-tool) and compares accuracy with and without the optimization prompt.
 
 ## Tool-Reliability Middleware
 
@@ -246,9 +266,10 @@ src/
   prompts/    -- Prompt management
   state/      -- File-based persistent state store
   team/       -- tmux-based team coordination
+  tool-reliability/ -- Robust parsing, coercion, retry, and benchmarks
   utils/      -- Shared utilities (fs, logger, markdown, process)
   workflows/  -- Step-based workflow engine
-prompts/      -- Built-in agent prompt definitions (.md)
+prompts/      -- Built-in agent prompt definitions (.md) + tool-calling optimization
 workflows/    -- Built-in workflow definitions (.md)
 __tests__/    -- Vitest test suite
 ```

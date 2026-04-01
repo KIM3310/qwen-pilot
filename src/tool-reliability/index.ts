@@ -39,3 +39,15 @@ export {
   type BenchmarkResult,
   type BenchmarkSummary,
 } from "./benchmark.js";
+export {
+  runPromptBench,
+  formatPromptBenchTable,
+  validateCall as validatePromptCall,
+  simulateGeneration,
+  PROMPT_BENCH_CASES,
+  type PromptBenchCategory,
+  type PromptBenchCase,
+  type PromptBenchSummary,
+  type PromptCaseResult,
+  type ExpectedCall,
+} from "./prompt-bench.js";
