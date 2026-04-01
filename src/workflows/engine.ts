@@ -53,15 +53,18 @@ function parseWorkflowSteps(body: string): WorkflowStep[] {
     const gateMatch = block.match(/gate:\s*(pass|review|test|none)/i);
     const retriesMatch = block.match(/retries:\s*(\d+)/);
 
-    const promptLines = lines.slice(1).filter((l) => !l.match(/^(gate|retries|agent):/i));
+    const promptLines = lines.slice(1).filter((l) => !/^(gate|retries|agent):/i.test(l));
     const prompt = promptLines.join("\n").trim();
+
+    const gateValue = gateMatch?.[1]?.toLowerCase();
+    const validGate = gateValue === "pass" || gateValue === "review" || gateValue === "test" ? gateValue : "none";
 
     steps.push({
       name: stepName,
       agent: agentMatch?.[1],
       prompt: prompt || `Execute ${stepName}`,
-      gate: (gateMatch?.[1]?.toLowerCase() as "pass" | "review" | "test" | "none") ?? "none",
-      retries: retriesMatch ? parseInt(retriesMatch[1], 10) : 0,
+      gate: validGate,
+      retries: retriesMatch?.[1] ? parseInt(retriesMatch[1], 10) : 0,
     });
   }
 

@@ -8,6 +8,11 @@ interface AskOptions {
 }
 
 export async function askCommand(prompt: string, options: AskOptions): Promise<void> {
+  if (!prompt || prompt.trim().length === 0) {
+    logger.error("Prompt cannot be empty");
+    process.exit(1);
+  }
+
   const config = await loadConfig();
   const session = createSession(config);
 

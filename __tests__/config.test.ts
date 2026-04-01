@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { QwenPilotConfigSchema, DEFAULT_CONFIG, ModelTier, SandboxMode } from "../src/config/schema.js";
-import { validateConfig } from "../src/config/loader.js";
+import { validateConfig, getUserConfigPath, getProjectConfigPath } from "../src/config/loader.js";
 
 describe("QwenPilotConfigSchema", () => {
   it("should produce valid defaults when parsing empty object", () => {
@@ -93,5 +93,41 @@ describe("SandboxMode", () => {
     expect(SandboxMode.parse("full")).toBe("full");
     expect(SandboxMode.parse("relaxed")).toBe("relaxed");
     expect(SandboxMode.parse("none")).toBe("none");
+  });
+});
+
+describe("Config paths", () => {
+  it("should return user config path under home directory", () => {
+    const userPath = getUserConfigPath();
+    expect(userPath).toContain("qwen-pilot.json");
+    expect(userPath).toContain(".config");
+  });
+
+  it("should return project config path under cwd", () => {
+    const projectPath = getProjectConfigPath();
+    expect(projectPath).toContain(".qwen-pilot");
+    expect(projectPath).toContain("qwen-pilot.json");
+  });
+});
+
+describe("validateConfig edge cases", () => {
+  it("should validate partial config objects", () => {
+    const result = validateConfig({ models: { high: "custom-model" } });
+    expect(result.valid).toBe(true);
+  });
+
+  it("should reject completely invalid types", () => {
+    const result = validateConfig("not an object");
+    expect(result.valid).toBe(false);
+  });
+
+  it("should reject null input", () => {
+    const result = validateConfig(null);
+    expect(result.valid).toBe(false);
+  });
+
+  it("should reject invalid nested values", () => {
+    const result = validateConfig({ harness: { maxTokens: -100 } });
+    expect(result.valid).toBe(false);
   });
 });

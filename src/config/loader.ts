@@ -5,11 +5,11 @@ import { fileExists, readJsonFile, logger } from "../utils/index.js";
 
 const CONFIG_FILENAME = "qwen-pilot.json";
 
-function getUserConfigPath(): string {
+export function getUserConfigPath(): string {
   return join(homedir(), ".config", "qwen-pilot", CONFIG_FILENAME);
 }
 
-function getProjectConfigPath(): string {
+export function getProjectConfigPath(): string {
   return join(process.cwd(), ".qwen-pilot", CONFIG_FILENAME);
 }
 
@@ -91,4 +91,4 @@ export function validateConfig(raw: unknown): { valid: boolean; errors: string[]
   };
 }
 
-export { DEFAULT_CONFIG, getUserConfigPath, getProjectConfigPath };
+export { DEFAULT_CONFIG };

@@ -77,3 +77,57 @@ describe("BUILTIN_WORKFLOWS", () => {
     expect(BUILTIN_WORKFLOWS.length).toBe(10);
   });
 });
+
+describe("WorkflowStepSchema edge cases", () => {
+  it("should accept retries at boundary value 5", () => {
+    const step = WorkflowStepSchema.parse({
+      name: "Retry Step",
+      prompt: "Try hard",
+      retries: 5,
+    });
+    expect(step.retries).toBe(5);
+  });
+
+  it("should accept retries at boundary value 0", () => {
+    const step = WorkflowStepSchema.parse({
+      name: "No Retry",
+      prompt: "Once only",
+      retries: 0,
+    });
+    expect(step.retries).toBe(0);
+  });
+
+  it("should reject negative retries", () => {
+    const result = WorkflowStepSchema.safeParse({
+      name: "Bad",
+      prompt: "Negative",
+      retries: -1,
+    });
+    expect(result.success).toBe(false);
+  });
+});
+
+describe("WorkflowMetaSchema edge cases", () => {
+  it("should reject missing name", () => {
+    const result = WorkflowMetaSchema.safeParse({
+      description: "No name",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("should reject missing description", () => {
+    const result = WorkflowMetaSchema.safeParse({
+      name: "no-desc",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("should accept tags array", () => {
+    const meta = WorkflowMetaSchema.parse({
+      name: "tagged",
+      description: "Has tags",
+      tags: ["ci", "deploy"],
+    });
+    expect(meta.tags).toEqual(["ci", "deploy"]);
+  });
+});

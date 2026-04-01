@@ -34,6 +34,8 @@ export function spawnDetached(
 }
 
 export async function commandExists(cmd: string): Promise<boolean> {
-  const result = await exec("which", [cmd]);
+  const isWindows = process.platform === "win32";
+  const checkCmd = isWindows ? "where" : "which";
+  const result = await exec(checkCmd, [cmd]);
   return result.exitCode === 0 && result.stdout.trim().length > 0;
 }

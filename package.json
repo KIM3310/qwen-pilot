@@ -48,10 +48,17 @@
     "multi-agent",
     "orchestration",
     "ai",
-    "llm"
+    "llm",
+    "workflow",
+    "prompt",
+    "agent",
+    "mcp",
+    "automation",
+    "tmux"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/KIM3310/qwen-pilot"
-  }
+  },
+  "homepage": "https://github.com/KIM3310/qwen-pilot#readme"
 }

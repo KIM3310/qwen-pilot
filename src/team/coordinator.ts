@@ -88,7 +88,7 @@ export function failTask(session: TeamSession, taskId: string, error: string): b
 export function getNextPhase(current: PhaseType): PhaseType {
   const idx = PHASE_ORDER.indexOf(current);
   if (idx === -1 || idx >= PHASE_ORDER.length - 1) return "plan";
-  return PHASE_ORDER[idx + 1];
+  return PHASE_ORDER[idx + 1] ?? "plan";
 }
 
 export function advancePhase(session: TeamSession): PhaseType {

@@ -56,9 +56,6 @@ export async function harnessCommand(options: HarnessOptions): Promise<void> {
     console.log(contextInjection);
   } else {
     logger.step("Launching Qwen CLI session...");
-    const { exec } = await import("../../utils/index.js");
-    // Save session before launch
-    await saveSession(session, stateDir);
     await hookManager.emit("session:start", { sessionId: session.id, tier, model: session.model });
 
     // In production, this would spawn an interactive Qwen CLI process.

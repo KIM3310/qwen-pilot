@@ -24,7 +24,7 @@ export async function workflowsShowCommand(name: string): Promise<void> {
   console.log(`Steps (${workflow.steps.length}):`);
   console.log("─".repeat(60));
   for (let i = 0; i < workflow.steps.length; i++) {
-    const step = workflow.steps[i];
+    const step = workflow.steps[i]!;
     console.log(`  ${i + 1}. ${step.name}${step.agent ? ` (agent: ${step.agent})` : ""}`);
     if (step.gate !== "none") console.log(`     gate: ${step.gate}`);
     if (step.retries > 0) console.log(`     retries: ${step.retries}`);

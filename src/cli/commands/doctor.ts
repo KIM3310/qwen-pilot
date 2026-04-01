@@ -15,7 +15,7 @@ export async function doctorCommand(): Promise<void> {
 
   // Check Node.js version
   const nodeVersion = process.version;
-  const major = parseInt(nodeVersion.slice(1).split(".")[0], 10);
+  const major = parseInt(nodeVersion.slice(1).split(".")[0] ?? "0", 10);
   checks.push({
     name: "Node.js",
     status: major >= 20 ? "ok" : "fail",

@@ -78,4 +78,32 @@ describe("renderMarkdownFrontmatter", () => {
     const result = renderMarkdownFrontmatter(fm);
     expect(result).toBe("---\nname: test\nversion: 1.0.0\n---");
   });
+
+  it("should render empty frontmatter", () => {
+    const result = renderMarkdownFrontmatter({});
+    expect(result).toBe("---\n\n---");
+  });
+});
+
+describe("parseMarkdownWithFrontmatter edge cases", () => {
+  it("should handle frontmatter with unclosed delimiter", () => {
+    const input = "---\nname: test\nno closing delimiter";
+    const result = parseMarkdownWithFrontmatter(input);
+    expect(result.frontmatter).toEqual({});
+  });
+
+  it("should handle content with colons in values", () => {
+    const input = `---
+url: https://example.com:8080/path
+---
+Body`;
+    const result = parseMarkdownWithFrontmatter(input);
+    expect(result.frontmatter.url).toBe("https://example.com:8080/path");
+  });
+
+  it("should handle empty string input", () => {
+    const result = parseMarkdownWithFrontmatter("");
+    expect(result.frontmatter).toEqual({});
+    expect(result.body).toBe("");
+  });
 });

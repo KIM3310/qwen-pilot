@@ -1,5 +1,5 @@
-import { loadConfig, validateConfig } from "../../config/index.js";
-import { logger } from "../../utils/index.js";
+import { loadConfig, validateConfig, getProjectConfigPath, getUserConfigPath } from "../../config/index.js";
+import { logger, fileExists, readTextFile } from "../../utils/index.js";
 
 export async function configShowCommand(): Promise<void> {
   try {
@@ -14,6 +14,21 @@ export async function configShowCommand(): Promise<void> {
 
 export async function configValidateCommand(): Promise<void> {
   try {
+    // First, check if any config files have syntax errors
+    const configPaths = [getUserConfigPath(), getProjectConfigPath()];
+    for (const cfgPath of configPaths) {
+      if (await fileExists(cfgPath)) {
+        try {
+          const raw = await readTextFile(cfgPath);
+          JSON.parse(raw);
+        } catch (e) {
+          logger.error(`Invalid JSON in config file: ${cfgPath}`);
+          logger.error(`  ${e instanceof Error ? e.message : String(e)}`);
+          process.exit(1);
+        }
+      }
+    }
+
     const config = await loadConfig();
     const result = validateConfig(config);
 
