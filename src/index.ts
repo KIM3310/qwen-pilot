@@ -12,3 +12,4 @@ export { getVersion } from "./utils/version.js";
 export { QwenPilotError, ERROR_CODES, formatErrorCode, type ErrorCode } from "./errors/index.js";
 export { createMetricsTracker, MetricsTracker, type SessionMetrics } from "./metrics/index.js";
 export { discoverPlugins, getPluginDir, buildPromptSearchDirs, buildWorkflowSearchDirs, type PluginEntry } from "./plugins/index.js";
+export { renderHud, renderHudFull, formatDuration, formatNumber, type HudState } from "./hud/index.js";

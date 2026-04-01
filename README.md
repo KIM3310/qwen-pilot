@@ -92,6 +92,37 @@ qp team 3 --role executor --task "Implement feature X"
 | `qp config validate` | Validate current configuration |
 | `qp doctor` | Verify qwen-pilot installation |
 | `qp status` | Show active sessions and status |
+| `qp hud` | Show real-time session HUD |
+| `qp hud --watch` | Live-updating HUD (refreshes every 2s) |
+| `qp hud --compact` | Single-line output (tmux-friendly) |
+
+## HUD (Heads-Up Display)
+
+Real-time session metrics dashboard for your terminal.
+
+```bash
+# One-shot status view (full dashboard with box-drawing)
+qp hud
+
+# Compact single-line output (tmux status bar friendly)
+qp hud --compact
+
+# Live-updating dashboard (refreshes every 2 seconds)
+qp hud --watch
+```
+
+The HUD displays:
+- Current model and tier
+- Session status (idle / running / error)
+- Prompts sent and estimated token usage
+- Elapsed time
+- Active workflow and step progress
+- Team worker count
+
+For tmux integration, add to `.tmux.conf`:
+```
+set -g status-right '#(qp hud --compact 2>/dev/null)'
+```
 
 ## Configuration
 

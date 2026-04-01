@@ -12,6 +12,7 @@ import { configShowCommand, configValidateCommand } from "./commands/config-cmd.
 import { statusCommand } from "./commands/status.js";
 import { benchmarkCommand } from "./commands/benchmark.js";
 import { initCommand } from "./commands/init.js";
+import { hudCommand } from "./commands/hud.js";
 import { startMcpServer } from "../mcp/index.js";
 import { getVersion } from "../utils/index.js";
 
@@ -130,6 +131,14 @@ configCmd
   .command("validate")
   .description("Validate current configuration")
   .action(configValidateCommand);
+
+// hud
+program
+  .command("hud")
+  .description("Show real-time session HUD (heads-up display)")
+  .option("--watch", "Refresh every 2 seconds")
+  .option("--compact", "Single-line output (tmux-friendly)")
+  .action((opts) => hudCommand({ watch: opts.watch, compact: opts.compact }));
 
 // status
 program
