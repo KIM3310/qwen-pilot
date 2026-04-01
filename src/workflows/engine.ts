@@ -5,7 +5,7 @@ import { type WorkflowDefinition, type WorkflowRunResult, type WorkflowStep, Wor
 import { readTextFile, listFiles, fileExists, parseMarkdownWithFrontmatter, logger } from "../utils/index.js";
 import { loadAgentDefinition, resolveModelForRole } from "../agents/index.js";
 import { type QwenPilotConfig } from "../config/index.js";
-import { commandExists, exec } from "../utils/index.js";
+import { ensureQwenCli, exec } from "../utils/index.js";
 import { createSession, buildSessionArgs } from "../harness/index.js";
 import { hookManager } from "../hooks/index.js";
 import { createMetricsTracker } from "../metrics/index.js";
@@ -164,12 +164,8 @@ async function executeStep(
   const args = buildSessionArgs(session, config);
   args.push("--prompt", fullPrompt);
 
-  const hasQwen = await commandExists("qwen");
-  if (!hasQwen) {
-    // Record what would happen without actually executing
-    const output = `[Qwen CLI not available] Would execute: qwen ${args.join(" ")}`;
-    return { ok: true, output, latencyMs: 0 };
-  }
+  // Ensure qwen CLI is available for real execution
+  await ensureQwenCli();
 
   const startMs = Date.now();
   const result = await exec("qwen", args);

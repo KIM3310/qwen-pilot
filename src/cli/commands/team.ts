@@ -12,7 +12,7 @@ import {
 import { loadAgentDefinition, resolveModelForRole } from "../../agents/index.js";
 import { hookManager } from "../../hooks/index.js";
 import { QwenPilotError } from "../../errors/index.js";
-import { logger } from "../../utils/index.js";
+import { logger, ensureQwenCli } from "../../utils/index.js";
 import { initializeStateDir } from "../../state/index.js";
 
 /** Options accepted by the `team` command. */
@@ -78,6 +78,9 @@ export async function teamCommand(countStr: string, options: TeamOptions): Promi
   const store = await initializeStateDir(stateDir);
 
   logger.banner("qwen-pilot team mode");
+
+  // Ensure qwen CLI is available before setting up team
+  await ensureQwenCli();
 
   // Check tmux
   const hasTmux = await checkTmuxAvailable();

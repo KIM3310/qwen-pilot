@@ -4,7 +4,7 @@ import { loadConfig, type ModelTier } from "../../config/index.js";
 import { createSession, buildSessionArgs, buildContextInjection, loadAgentsFile, saveSession } from "../../harness/index.js";
 import { hookManager } from "../../hooks/index.js";
 import { createMetricsTracker } from "../../metrics/index.js";
-import { logger, commandExists } from "../../utils/index.js";
+import { logger, ensureQwenCli } from "../../utils/index.js";
 
 /** Options accepted by the `harness` command. */
 export interface HarnessOptions {
@@ -77,45 +77,33 @@ export async function harnessCommand(options: HarnessOptions): Promise<void> {
     logger.success("Loaded AGENTS.md context");
   }
 
-  // Check for qwen CLI
-  const hasQwen = await commandExists("qwen");
-  if (!hasQwen) {
-    logger.warn("Qwen CLI not found. Install it to use interactive sessions.");
-    logger.info("Session prepared with the following arguments:");
-    logger.info(`  qwen ${args.join(" ")}`);
-    logger.info("\nContext injection:");
-    console.log(contextInjection);
-  } else {
-    logger.step("Launching Qwen CLI session...");
-    await hookManager.emit("session:start", { sessionId: session.id, tier, model: session.model });
+  // Ensure qwen CLI is available
+  await ensureQwenCli();
 
-    await saveSession(session, stateDir);
-    logger.success(`Session ${session.id} ready`);
-
-    // Spawn an interactive Qwen CLI process with inherited stdio
-    const child = spawn("qwen", args, {
-      stdio: "inherit",
-      env: { ...process.env, QP_SESSION_ID: session.id },
-    });
-
-    await new Promise<void>((resolve, reject) => {
-      child.on("close", (code) => {
-        hookManager.emit("session:end", { sessionId: session.id, exitCode: code ?? 0 });
-        if (code !== 0) {
-          hookManager.emit("session:error", { sessionId: session.id, exitCode: code ?? 1 });
-        }
-        resolve();
-      });
-      child.on("error", (err) => {
-        hookManager.emit("session:error", { sessionId: session.id, error: err.message });
-        logger.error(`Failed to launch Qwen CLI: ${err.message}`);
-        resolve();
-      });
-    });
-
-    return;
-  }
+  logger.step("Launching Qwen CLI session...");
+  await hookManager.emit("session:start", { sessionId: session.id, tier, model: session.model });
 
   await saveSession(session, stateDir);
   logger.success(`Session ${session.id} ready`);
+
+  // Spawn an interactive Qwen CLI process with inherited stdio
+  const child = spawn("qwen", args, {
+    stdio: "inherit",
+    env: { ...process.env, QP_SESSION_ID: session.id },
+  });
+
+  await new Promise<void>((resolve) => {
+    child.on("close", (code) => {
+      hookManager.emit("session:end", { sessionId: session.id, exitCode: code ?? 0 });
+      if (code !== 0) {
+        hookManager.emit("session:error", { sessionId: session.id, exitCode: code ?? 1 });
+      }
+      resolve();
+    });
+    child.on("error", (err) => {
+      hookManager.emit("session:error", { sessionId: session.id, error: err.message });
+      logger.error(`Failed to launch Qwen CLI: ${err.message}`);
+      resolve();
+    });
+  });
 }

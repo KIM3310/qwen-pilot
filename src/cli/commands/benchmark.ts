@@ -1,7 +1,7 @@
 import { loadConfig } from "../../config/index.js";
 import { createSession, buildSessionArgs } from "../../harness/index.js";
 import { createMetricsTracker } from "../../metrics/index.js";
-import { logger, commandExists, exec } from "../../utils/index.js";
+import { logger, ensureQwenCli, exec } from "../../utils/index.js";
 import type { ModelTier } from "../../config/index.js";
 
 /** Result from a single benchmark probe. */
@@ -39,11 +39,13 @@ export async function benchmarkCommand(prompt: string, options?: { dryRun?: bool
   ];
 
   const dryRun = options?.dryRun ?? false;
-  const hasQwen = dryRun ? false : await commandExists("qwen");
   const results: BenchmarkResult[] = [];
 
   if (dryRun) {
     logger.info("[DRY RUN] Showing planned benchmark configuration:\n");
+  } else {
+    // Ensure qwen CLI is available for real execution
+    await ensureQwenCli();
   }
 
   for (const { tier, label } of tiers) {
@@ -53,14 +55,14 @@ export async function benchmarkCommand(prompt: string, options?: { dryRun?: bool
 
     logger.step(`[${label}] ${session.model}...`);
 
-    if (!hasQwen) {
+    if (dryRun) {
       results.push({
         tier: label,
         model: session.model,
         latencyMs: 0,
         outputLength: 0,
         exitCode: -1,
-        error: "Qwen CLI not found",
+        error: "dry-run",
       });
       continue;
     }
@@ -117,8 +119,5 @@ export async function benchmarkCommand(prompt: string, options?: { dryRun?: bool
     console.log(`\n  Fastest: ${fastest.tier} (${fastest.model}) at ${(fastest.latencyMs / 1000).toFixed(2)}s`);
   } else if (dryRun) {
     logger.info("\nNo changes were made (dry-run).");
-  } else if (!hasQwen) {
-    logger.warn("\nQwen CLI not found. Install it to run real benchmarks.");
-    logger.info("Results above show the planned configuration for each tier.");
   }
 }

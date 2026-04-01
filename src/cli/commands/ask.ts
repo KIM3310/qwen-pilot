@@ -2,7 +2,7 @@ import { loadConfig } from "../../config/index.js";
 import { createSession, buildSessionArgs, buildContextInjection, loadAgentsFile } from "../../harness/index.js";
 import { createMetricsTracker } from "../../metrics/index.js";
 import { QwenPilotError } from "../../errors/index.js";
-import { logger, commandExists, exec } from "../../utils/index.js";
+import { logger, ensureQwenCli, exec } from "../../utils/index.js";
 
 /** Options accepted by the `ask` command. */
 export interface AskOptions {
@@ -64,23 +64,8 @@ export async function askCommand(prompt: string, options: AskOptions): Promise<v
     return;
   }
 
-  const hasQwen = await commandExists("qwen");
-  if (!hasQwen) {
-    logger.warn("Qwen CLI not found in PATH");
-    logger.info("\nWould execute:");
-    logger.info(`  qwen ${args.join(" ")}`);
-    logger.info(`\nPrompt: ${prompt}`);
-
-    if (options.role) {
-      const { loadAgentDefinition } = await import("../../agents/index.js");
-      const agentDef = await loadAgentDefinition(options.role);
-      if (agentDef) {
-        logger.info(`\nAgent: ${agentDef.role.name}`);
-        logger.info(`System prompt preview: ${agentDef.systemPrompt.slice(0, 200)}...`);
-      }
-    }
-    return;
-  }
+  // Ensure qwen CLI is available
+  await ensureQwenCli();
 
   logger.step(`Asking Qwen (${session.model})...`);
   const startMs = Date.now();
