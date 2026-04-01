@@ -4,12 +4,13 @@ import { z } from "zod";
 import { createStateStore, type StateStore } from "../state/index.js";
 import { loadConfig } from "../config/index.js";
 import { listSessions } from "../harness/index.js";
+import { getVersion } from "../utils/index.js";
 import { join } from "node:path";
 
 export function createMcpServer(stateDir: string): McpServer {
   const server = new McpServer({
     name: "qwen-pilot",
-    version: "1.0.0",
+    version: getVersion(),
   });
 
   const store = createStateStore(stateDir);

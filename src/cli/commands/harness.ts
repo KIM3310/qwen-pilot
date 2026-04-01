@@ -1,4 +1,5 @@
 import { join } from "node:path";
+import { spawn } from "node:child_process";
 import { loadConfig, type ModelTier } from "../../config/index.js";
 import { createSession, buildSessionArgs, buildContextInjection, loadAgentsFile, saveSession } from "../../harness/index.js";
 import { hookManager } from "../../hooks/index.js";
@@ -58,10 +59,31 @@ export async function harnessCommand(options: HarnessOptions): Promise<void> {
     logger.step("Launching Qwen CLI session...");
     await hookManager.emit("session:start", { sessionId: session.id, tier, model: session.model });
 
-    // In production, this would spawn an interactive Qwen CLI process.
-    // For now we report the command:
-    logger.info(`Command: qwen ${args.join(" ")}`);
-    logger.info("Use --system-prompt to inject context.");
+    await saveSession(session, stateDir);
+    logger.success(`Session ${session.id} ready`);
+
+    // Spawn an interactive Qwen CLI process with inherited stdio
+    const child = spawn("qwen", args, {
+      stdio: "inherit",
+      env: { ...process.env, QP_SESSION_ID: session.id },
+    });
+
+    await new Promise<void>((resolve, reject) => {
+      child.on("close", (code) => {
+        hookManager.emit("session:end", { sessionId: session.id, exitCode: code ?? 0 });
+        if (code !== 0) {
+          hookManager.emit("session:error", { sessionId: session.id, exitCode: code ?? 1 });
+        }
+        resolve();
+      });
+      child.on("error", (err) => {
+        hookManager.emit("session:error", { sessionId: session.id, error: err.message });
+        logger.error(`Failed to launch Qwen CLI: ${err.message}`);
+        resolve();
+      });
+    });
+
+    return;
   }
 
   await saveSession(session, stateDir);

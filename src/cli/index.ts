@@ -11,13 +11,14 @@ import { doctorCommand } from "./commands/doctor.js";
 import { configShowCommand, configValidateCommand } from "./commands/config-cmd.js";
 import { statusCommand } from "./commands/status.js";
 import { startMcpServer } from "../mcp/index.js";
+import { getVersion } from "../utils/index.js";
 
 const program = new Command();
 
 program
   .name("qp")
   .description("Multi-agent orchestration harness for Qwen CLI")
-  .version("1.0.0");
+  .version(getVersion());
 
 // setup
 program

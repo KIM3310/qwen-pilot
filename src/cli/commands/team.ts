@@ -82,7 +82,10 @@ export async function teamCommand(countStr: string, options: TeamOptions): Promi
       ? resolveModelForRole(agentDef.role, config.models)
       : config.models.balanced;
 
-    const workerCmd = `echo "[qwen-pilot] Worker ${worker.id} (${role}) ready — model: ${model}"`;
+    // Send the actual qwen CLI command to the tmux pane
+    const qwenArgs = [`--model`, model];
+    const workerCmd = `qwen ${qwenArgs.join(" ")}`;
+    logger.info(`  Pane ${paneId}: ${workerCmd}`);
     await sendToPane(paneId, workerCmd);
   }
 

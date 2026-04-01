@@ -1,3 +1,8 @@
+![CI](https://github.com/KIM3310/qwen-pilot/actions/workflows/ci.yml/badge.svg)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)
+![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)
+
 # qwen-pilot
 
 [English](README.md) | [한국어](README.ko.md)
@@ -119,6 +124,23 @@ architect, planner, executor, debugger, reviewer, security-auditor, test-enginee
 ## Built-in Workflows
 
 autopilot, deep-plan, sprint, investigate, tdd, review-cycle, refactor, deploy-prep, interview, team-sync
+
+## Architecture
+
+```mermaid
+graph TD
+  CLI[qp CLI] --> Harness[Session Harness]
+  CLI --> Team[Team Coordinator]
+  CLI --> WF[Workflow Engine]
+  Harness --> Qwen[Qwen CLI]
+  Team --> tmux[tmux Panes]
+  tmux --> Qwen
+  WF --> Agents[Agent System]
+  Agents --> Qwen
+  MCP[MCP Server] --> State[State Store]
+  MCP --> Memory[Project Memory]
+  Hooks[Hook System] --> Harness
+```
 
 ## Project Structure
 

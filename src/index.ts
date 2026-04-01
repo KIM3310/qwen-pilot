@@ -8,3 +8,4 @@ export { createStateStore, initializeStateDir, type StateStore } from "./state/i
 export { hookManager, type HookEvent } from "./hooks/index.js";
 export { createMcpServer } from "./mcp/index.js";
 export { listPrompts, showPrompt, getPromptContent } from "./prompts/index.js";
+export { getVersion } from "./utils/version.js";

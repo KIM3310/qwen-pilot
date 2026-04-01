@@ -1,3 +1,8 @@
+![CI](https://github.com/KIM3310/qwen-pilot/actions/workflows/ci.yml/badge.svg)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)
+![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)
+
 # qwen-pilot
 
 [English](README.md) | [한국어](README.ko.md)

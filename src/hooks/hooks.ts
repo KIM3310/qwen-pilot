@@ -3,6 +3,7 @@ import { logger } from "../utils/index.js";
 export type HookEvent =
   | "session:start"
   | "session:end"
+  | "session:error"
   | "workflow:start"
   | "workflow:step"
   | "workflow:end"
