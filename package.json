@@ -52,7 +52,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.4.10",
     "@types/node": "^22.15.3",
-    "@vitest/coverage-v8": "^4.1.2",
+    "@vitest/coverage-v8": "^3.1.2",
     "typescript": "^5.8.3",
     "vitest": "^3.1.2"
   },
@@ -74,6 +74,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/KIM3310/qwen-pilot"
+  },
+  "bugs": {
+    "url": "https://github.com/KIM3310/qwen-pilot/issues"
   },
   "homepage": "https://github.com/KIM3310/qwen-pilot#readme"
 }
