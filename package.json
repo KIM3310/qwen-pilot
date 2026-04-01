@@ -32,6 +32,7 @@
     "Install-Linux.sh"
   ],
   "scripts": {
+    "prebuild": "rm -f tsconfig.tsbuildinfo",
     "build": "tsc",
     "dev": "tsc --watch",
     "test": "vitest run",
