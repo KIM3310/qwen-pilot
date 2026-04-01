@@ -112,7 +112,7 @@ echo   [OK] Using: !PIP_CMD!
 :PipDone
 
 :: ═══════════════════════════════════════════════════════════
-:: STEP 3 — Qwen CLI (dashscope)
+:: STEP 3 — Qwen Code CLI (npm)
 :: ═══════════════════════════════════════════════════════════
 echo.
 echo   [3/7] Checking Qwen Code CLI...
@@ -122,30 +122,14 @@ where qwen >nul 2>nul || where qwen-code >nul 2>nul
 if !ERRORLEVEL! equ 0 (
     echo   [OK] Qwen Code CLI already installed
 ) else (
-    if defined PIP_CMD (
-        echo   Installing Qwen Code CLI (dashscope via pip)...
-        !PIP_CMD! install dashscope 2>nul
-        if !ERRORLEVEL! equ 0 (
-            echo   [OK] dashscope package installed
-        ) else (
-            echo   [WARN] Could not install dashscope. Try manually: pip install dashscope
-        )
-        :: Persist pip Scripts dir in PATH
-        for /f "tokens=*" %%a in ('python -m site --user-site 2^>nul') do set "PY_SCRIPTS=%%a\..\Scripts"
-        if not defined PY_SCRIPTS (
-            for /f "tokens=*" %%a in ('python3 -m site --user-site 2^>nul') do set "PY_SCRIPTS=%%a\..\Scripts"
-        )
-        if defined PY_SCRIPTS (
-            echo !PATH! | find /i "!PY_SCRIPTS!" >nul 2>nul
-            if !ERRORLEVEL! neq 0 (
-                setx PATH "%PATH%;!PY_SCRIPTS!" /M 2>nul || setx PATH "%PATH%;!PY_SCRIPTS!"
-                set "PATH=!PATH!;!PY_SCRIPTS!"
-            )
-        )
+    echo   Installing Qwen Code CLI...
+    call npm install -g @qwen-code/qwen-code
+    where qwen >nul 2>nul || where qwen-code >nul 2>nul
+    if !ERRORLEVEL! equ 0 (
+        echo   [OK] Qwen Code CLI installed
     ) else (
-        echo   [WARN] Skipping -- no pip available. Install Python first.
+        echo   [WARN] Could not install Qwen Code CLI. Try manually: npm install -g @qwen-code/qwen-code
     )
-    echo   Qwen CLI setup -- see https://dashscope.console.aliyun.com/
 )
 
 :: ═══════════════════════════════════════════════════════════

@@ -29,7 +29,7 @@ export async function doctorCommand(): Promise<void> {
   checks.push({
     name: "Qwen Code CLI",
     status: qwenCliFound ? "ok" : "warn",
-    message: qwenCliFound ? "Found in PATH" : "Not found — install Qwen Code CLI (qwen or qwen-code) for full functionality",
+    message: qwenCliFound ? "Found in PATH" : "Not found — install with: npm install -g @qwen-code/qwen-code",
   });
 
   // Check tmux

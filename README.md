@@ -38,7 +38,7 @@ That's it -- the installer handles Node.js, Qwen CLI, dependencies, build, and g
 ## Requirements
 
 - Node.js >= 20.0.0
-- Qwen CLI installed and configured
+- Qwen Code CLI (`npm install -g @qwen-code/qwen-code`)
 - tmux (optional, for team coordination)
 
 ## Installation

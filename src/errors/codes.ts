@@ -6,7 +6,7 @@
  */
 export const ERROR_CODES = {
   QP_001: "Configuration file is invalid or missing: {detail}",
-  QP_002: "Qwen Code CLI not found in PATH — install it (qwen or qwen-code) or use --dry-run",
+  QP_002: "Qwen CLI not found in PATH — install with: npm install -g @qwen-code/qwen-code",
   QP_003: "Agent role not found: {detail}",
   QP_004: "Workflow not found: {detail}",
   QP_005: "Workflow step failed: {detail}",

@@ -198,33 +198,18 @@ else
 fi
 
 # ═════════════════════════════════════════════════════════════
-# STEP 4 — Qwen CLI (dashscope)
+# STEP 4 — Qwen Code CLI (npm)
 # ═════════════════════════════════════════════════════════════
 step "4/8  Checking Qwen Code CLI..."
 if command -v qwen &>/dev/null || command -v qwen-code &>/dev/null; then
   ok "Qwen Code CLI already installed"
 else
-  info "Installing Qwen Code CLI (dashscope via pip)..."
-  if run_pip install dashscope 2>/dev/null; then
-    ok "dashscope package installed"
+  info "Installing Qwen Code CLI..."
+  npm install -g @qwen-code/qwen-code
+  if command -v qwen &>/dev/null || command -v qwen-code &>/dev/null; then
+    ok "Qwen Code CLI installed"
   else
-    warn "Could not install dashscope. Try manually: pip3 install dashscope"
-  fi
-  info "Qwen CLI setup -- see https://dashscope.console.aliyun.com/"
-fi
-
-# ── Persist pip user bin in PATH ────────────────────────────
-if command -v python3 &>/dev/null; then
-  PYTHON_BIN="$(python3 -m site --user-base 2>/dev/null)/bin"
-  if [[ -n "$PYTHON_BIN" ]]; then
-    for rc in ~/.bashrc ~/.profile ~/.zshrc; do
-      if [ -f "$rc" ]; then
-        if ! grep -q "$PYTHON_BIN" "$rc" 2>/dev/null; then
-          echo "export PATH=\"$PYTHON_BIN:\$PATH\"" >> "$rc"
-        fi
-      fi
-    done
-    export PATH="$PYTHON_BIN:$PATH"
+    warn "Could not install Qwen Code CLI. Try manually: npm install -g @qwen-code/qwen-code"
   fi
 fi
 

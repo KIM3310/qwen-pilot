@@ -82,9 +82,7 @@ export async function ensureQwenCli(): Promise<void> {
       "",
       "Install it before running this command (or use --dry-run to preview):",
       "",
-      "  pip install dashscope       # via pip (dashscope SDK)",
-      "  brew install qwen-code      # via Homebrew (macOS)",
-      "  npm install -g qwen-code    # via npm",
+      "  npm install -g @qwen-code/qwen-code   # via npm (requires Node.js >= 20)",
       "",
       "After installing, verify with:  qwen --version  or  qwen-code --version",
     ].join("\n");

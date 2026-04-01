@@ -38,7 +38,7 @@ cd qwen-pilot
 ## 요구 사항
 
 - Node.js >= 20.0.0
-- Qwen CLI 설치 및 설정 완료
+- Qwen Code CLI (`npm install -g @qwen-code/qwen-code`)
 - tmux (선택 사항, 팀 협업용)
 
 ## 설치
