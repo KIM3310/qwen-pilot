@@ -90,20 +90,6 @@ get_node_major() {
   echo "${ver%%.*}"
 }
 
-# ── pip helper (try pip3, pip, python3 -m pip) ───────────────
-run_pip() {
-  if command -v pip3 &>/dev/null; then
-    pip3 "$@"
-  elif command -v pip &>/dev/null; then
-    pip "$@"
-  elif command -v python3 &>/dev/null; then
-    python3 -m pip "$@"
-  elif command -v python &>/dev/null; then
-    python -m pip "$@"
-  else
-    return 1
-  fi
-}
 
 # ═════════════════════════════════════════════════════════════
 # STEP 1 — Prerequisites (curl, git)
@@ -173,32 +159,7 @@ else
 fi
 
 # ═════════════════════════════════════════════════════════════
-# STEP 3 — Python / pip
-# ═════════════════════════════════════════════════════════════
-step "3/8  Checking Python / pip..."
-
-if run_pip --version &>/dev/null; then
-  ok "pip available"
-else
-  info "pip not found. Installing Python 3 + pip..."
-  case "$PKG" in
-    apt)    $SUDO apt-get update -qq && $SUDO apt-get install -y python3-pip ;;
-    dnf)    $SUDO dnf install -y python3-pip ;;
-    yum)    $SUDO yum install -y python3-pip ;;
-    pacman) $SUDO pacman -Sy --noconfirm python-pip ;;
-    zypper) $SUDO zypper install -y python3-pip ;;
-    apk)    $SUDO apk add --no-cache py3-pip ;;
-    *)      warn "Cannot install pip automatically. Install Python 3 manually." ;;
-  esac
-  if run_pip --version &>/dev/null; then
-    ok "pip installed"
-  else
-    warn "pip still not available after install attempt"
-  fi
-fi
-
-# ═════════════════════════════════════════════════════════════
-# STEP 4 — Qwen Code CLI (npm)
+# STEP 3 — Qwen Code CLI (npm)
 # ═════════════════════════════════════════════════════════════
 step "4/8  Checking Qwen Code CLI..."
 if command -v qwen &>/dev/null || command -v qwen-code &>/dev/null; then

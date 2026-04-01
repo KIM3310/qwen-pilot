@@ -76,43 +76,7 @@ if !ERRORLEVEL! neq 0 (
 :: ═══════════════════════════════════════════════════════════
 :: STEP 2 — Python / pip check
 :: ═══════════════════════════════════════════════════════════
-echo.
-echo   [2/7] Checking Python / pip...
-echo   ---------------------------------
-
-set "PIP_CMD="
-where pip3 >nul 2>nul
-if !ERRORLEVEL! equ 0 (
-    set "PIP_CMD=pip3"
-    goto :PipFound
-)
-where pip >nul 2>nul
-if !ERRORLEVEL! equ 0 (
-    set "PIP_CMD=pip"
-    goto :PipFound
-)
-where python3 >nul 2>nul
-if !ERRORLEVEL! equ 0 (
-    set "PIP_CMD=python3 -m pip"
-    goto :PipFound
-)
-where python >nul 2>nul
-if !ERRORLEVEL! equ 0 (
-    set "PIP_CMD=python -m pip"
-    goto :PipFound
-)
-echo   [WARN] Python/pip not found.
-echo          Install Python from https://www.python.org/downloads/
-echo          (check "Add Python to PATH" during install)
-goto :PipDone
-
-:PipFound
-echo   [OK] Using: !PIP_CMD!
-
-:PipDone
-
-:: ═══════════════════════════════════════════════════════════
-:: STEP 3 — Qwen Code CLI (npm)
+:: STEP 2 — Qwen Code CLI (npm)
 :: ═══════════════════════════════════════════════════════════
 echo.
 echo   [3/7] Checking Qwen Code CLI...

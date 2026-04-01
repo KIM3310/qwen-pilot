@@ -53,19 +53,6 @@ get_node_major() {
   echo "${ver%%.*}"
 }
 
-# ── pip helper (try pip3, pip, python3 -m pip) ───────────────
-run_pip() {
-  if command -v pip3 &>/dev/null; then
-    pip3 "$@"
-  elif command -v pip &>/dev/null; then
-    pip "$@"
-  elif command -v python3 &>/dev/null; then
-    python3 -m pip "$@"
-  else
-    warn "No pip found. Please install Python 3 and re-run."
-    return 1
-  fi
-}
 
 # ═════════════════════════════════════════════════════════════
 # STEP 1 — Homebrew
