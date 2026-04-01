@@ -1,0 +1,79 @@
+import { describe, it, expect } from "vitest";
+import { WorkflowStepSchema, WorkflowMetaSchema, BUILTIN_WORKFLOWS } from "../src/workflows/types.js";
+
+describe("WorkflowStepSchema", () => {
+  it("should validate a minimal step", () => {
+    const step = WorkflowStepSchema.parse({
+      name: "Plan",
+      prompt: "Create an implementation plan",
+    });
+    expect(step.name).toBe("Plan");
+    expect(step.gate).toBe("none");
+    expect(step.retries).toBe(0);
+    expect(step.agent).toBeUndefined();
+  });
+
+  it("should accept optional agent and gate", () => {
+    const step = WorkflowStepSchema.parse({
+      name: "Review",
+      prompt: "Review the code",
+      agent: "reviewer",
+      gate: "review",
+      retries: 2,
+    });
+    expect(step.agent).toBe("reviewer");
+    expect(step.gate).toBe("review");
+    expect(step.retries).toBe(2);
+  });
+
+  it("should reject invalid gate value", () => {
+    const result = WorkflowStepSchema.safeParse({
+      name: "Step",
+      prompt: "Do stuff",
+      gate: "invalid",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("should reject retries above 5", () => {
+    const result = WorkflowStepSchema.safeParse({
+      name: "Step",
+      prompt: "Retry",
+      retries: 10,
+    });
+    expect(result.success).toBe(false);
+  });
+});
+
+describe("WorkflowMetaSchema", () => {
+  it("should validate with defaults", () => {
+    const meta = WorkflowMetaSchema.parse({
+      name: "test-workflow",
+      description: "A test workflow",
+    });
+    expect(meta.version).toBe("1.0.0");
+    expect(meta.loop).toBe(false);
+    expect(meta.maxIterations).toBe(10);
+  });
+
+  it("should accept loop config", () => {
+    const meta = WorkflowMetaSchema.parse({
+      name: "looping",
+      description: "A looping workflow",
+      loop: true,
+      maxIterations: 5,
+    });
+    expect(meta.loop).toBe(true);
+    expect(meta.maxIterations).toBe(5);
+  });
+});
+
+describe("BUILTIN_WORKFLOWS", () => {
+  it("should contain expected built-in workflows", () => {
+    expect(BUILTIN_WORKFLOWS).toContain("autopilot");
+    expect(BUILTIN_WORKFLOWS).toContain("tdd");
+    expect(BUILTIN_WORKFLOWS).toContain("sprint");
+    expect(BUILTIN_WORKFLOWS).toContain("refactor");
+    expect(BUILTIN_WORKFLOWS.length).toBe(10);
+  });
+});

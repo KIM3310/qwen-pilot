@@ -1,0 +1,56 @@
+{
+  "name": "qwen-pilot",
+  "version": "1.0.0",
+  "description": "Multi-agent orchestration harness for Qwen CLI — prompts, workflows, and team coordination",
+  "author": "Doeon Kim",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "bin": {
+    "qp": "dist/cli/index.js",
+    "qwen-pilot": "dist/cli/index.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "prompts",
+    "workflows",
+    "AGENTS.md",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "commander": "^13.1.0",
+    "zod": "^3.24.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.2"
+  },
+  "keywords": [
+    "qwen",
+    "alibaba",
+    "cli",
+    "multi-agent",
+    "orchestration",
+    "ai",
+    "llm"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KIM3310/qwen-pilot"
+  }
+}
