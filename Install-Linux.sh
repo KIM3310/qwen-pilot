@@ -213,6 +213,21 @@ else
   info "Qwen CLI setup -- see https://dashscope.console.aliyun.com/"
 fi
 
+# ── Persist pip user bin in PATH ────────────────────────────
+if command -v python3 &>/dev/null; then
+  PYTHON_BIN="$(python3 -m site --user-base 2>/dev/null)/bin"
+  if [[ -n "$PYTHON_BIN" ]]; then
+    for rc in ~/.bashrc ~/.profile ~/.zshrc; do
+      if [ -f "$rc" ]; then
+        if ! grep -q "$PYTHON_BIN" "$rc" 2>/dev/null; then
+          echo "export PATH=\"$PYTHON_BIN:\$PATH\"" >> "$rc"
+        fi
+      fi
+    done
+    export PATH="$PYTHON_BIN:$PATH"
+  fi
+fi
+
 # ═════════════════════════════════════════════════════════════
 # STEP 5 — npm install
 # ═════════════════════════════════════════════════════════════
@@ -233,6 +248,19 @@ ok "Done"
 step "7/8  Registering 'qp' command..."
 npm link 2>/dev/null || $SUDO npm link || fail "npm link failed"
 ok "Done"
+
+# ── Persist npm global bin in PATH ──────────────────────────
+NPM_BIN="$(npm config get prefix)/bin"
+if [[ -n "$NPM_BIN" ]]; then
+  for rc in ~/.bashrc ~/.profile ~/.zshrc; do
+    if [ -f "$rc" ]; then
+      if ! grep -q "$NPM_BIN" "$rc" 2>/dev/null; then
+        echo "export PATH=\"$NPM_BIN:\$PATH\"" >> "$rc"
+      fi
+    fi
+  done
+  export PATH="$NPM_BIN:$PATH"
+fi
 
 # ═════════════════════════════════════════════════════════════
 # STEP 8 — Setup + Doctor

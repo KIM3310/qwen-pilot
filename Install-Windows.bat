@@ -48,6 +48,11 @@ if !ERRORLEVEL! neq 0 (
         exit /b 1
     )
     call :RefreshPath
+    :: Persist Node.js in system PATH
+    for /f "tokens=*" %%a in ('where node 2^>nul') do set "NODE_DIR=%%~dpa"
+    if defined NODE_DIR (
+        setx PATH "%PATH%;!NODE_DIR!" /M 2>nul || setx PATH "%PATH%;!NODE_DIR!"
+    )
     echo   [OK] Node.js installed
 ) else (
     :: Check version
@@ -125,6 +130,18 @@ if !ERRORLEVEL! equ 0 (
         ) else (
             echo   [WARN] Could not install dashscope. Try manually: pip install dashscope
         )
+        :: Persist pip Scripts dir in PATH
+        for /f "tokens=*" %%a in ('python -m site --user-site 2^>nul') do set "PY_SCRIPTS=%%a\..\Scripts"
+        if not defined PY_SCRIPTS (
+            for /f "tokens=*" %%a in ('python3 -m site --user-site 2^>nul') do set "PY_SCRIPTS=%%a\..\Scripts"
+        )
+        if defined PY_SCRIPTS (
+            echo !PATH! | find /i "!PY_SCRIPTS!" >nul 2>nul
+            if !ERRORLEVEL! neq 0 (
+                setx PATH "%PATH%;!PY_SCRIPTS!" /M 2>nul || setx PATH "%PATH%;!PY_SCRIPTS!"
+                set "PATH=!PATH!;!PY_SCRIPTS!"
+            )
+        )
     ) else (
         echo   [WARN] Skipping -- no pip available. Install Python first.
     )
@@ -178,6 +195,15 @@ if !ERRORLEVEL! neq 0 (
         echo   [WARN] Not running as Administrator.
         echo          Please re-run this script as Administrator, or run manually:
         echo          npm link
+    )
+)
+:: Persist npm global prefix in PATH
+for /f "tokens=*" %%a in ('npm config get prefix 2^>nul') do set "NPM_PREFIX=%%a"
+if defined NPM_PREFIX (
+    echo !PATH! | find /i "!NPM_PREFIX!" >nul 2>nul
+    if !ERRORLEVEL! neq 0 (
+        setx PATH "%PATH%;!NPM_PREFIX!" /M 2>nul || setx PATH "%PATH%;!NPM_PREFIX!"
+        set "PATH=!PATH!;!NPM_PREFIX!"
     )
 )
 echo   [OK] Done

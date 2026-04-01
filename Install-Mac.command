@@ -92,6 +92,17 @@ else
 fi
 setup_brew_env
 
+# ── Persist Homebrew PATH in shell rc files ─────────────────
+BREW_PREFIX="$(brew --prefix)"
+for rc in ~/.zshrc ~/.bash_profile ~/.bashrc; do
+  if [ -f "$rc" ] || [ "$rc" = "$HOME/.zshrc" ]; then
+    if ! grep -q "$BREW_PREFIX/bin" "$rc" 2>/dev/null; then
+      echo "export PATH=\"$BREW_PREFIX/bin:\$PATH\"" >> "$rc"
+    fi
+  fi
+done
+export PATH="$BREW_PREFIX/bin:$PATH"
+
 # ═════════════════════════════════════════════════════════════
 # STEP 2 — Node.js (>= 20)
 # ═════════════════════════════════════════════════════════════
@@ -127,6 +138,21 @@ else
   info "Qwen CLI setup -- see https://dashscope.console.aliyun.com/"
 fi
 
+# ── Persist pip user bin in PATH ────────────────────────────
+if command -v python3 &>/dev/null; then
+  PYTHON_BIN="$(python3 -m site --user-base 2>/dev/null)/bin"
+  if [[ -n "$PYTHON_BIN" ]]; then
+    for rc in ~/.zshrc ~/.bash_profile ~/.bashrc; do
+      if [ -f "$rc" ] || [ "$rc" = "$HOME/.zshrc" ]; then
+        if ! grep -q "$PYTHON_BIN" "$rc" 2>/dev/null; then
+          echo "export PATH=\"$PYTHON_BIN:\$PATH\"" >> "$rc"
+        fi
+      fi
+    done
+    export PATH="$PYTHON_BIN:$PATH"
+  fi
+fi
+
 # ═════════════════════════════════════════════════════════════
 # STEP 4 — npm install
 # ═════════════════════════════════════════════════════════════
@@ -147,6 +173,19 @@ ok "Done"
 step "6/7  Registering 'qp' command..."
 npm link 2>/dev/null || sudo npm link || fail "npm link failed"
 ok "Done"
+
+# ── Persist npm global bin in PATH ──────────────────────────
+NPM_BIN="$(npm config get prefix)/bin"
+if [[ -n "$NPM_BIN" ]]; then
+  for rc in ~/.zshrc ~/.bash_profile ~/.bashrc; do
+    if [ -f "$rc" ] || [ "$rc" = "$HOME/.zshrc" ]; then
+      if ! grep -q "$NPM_BIN" "$rc" 2>/dev/null; then
+        echo "export PATH=\"$NPM_BIN:\$PATH\"" >> "$rc"
+      fi
+    fi
+  done
+  export PATH="$NPM_BIN:$PATH"
+fi
 
 # ═════════════════════════════════════════════════════════════
 # STEP 7 — Setup + Doctor
