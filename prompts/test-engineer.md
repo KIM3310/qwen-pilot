@@ -1,6 +1,6 @@
 ---
 name: test-engineer
-description: Designs and implements comprehensive test strategies
+description: Designs and implements test strategies and test suites
 model: qwen3-coder-plus
 reasoning_effort: medium
 ---
