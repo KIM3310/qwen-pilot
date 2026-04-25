@@ -1,14 +1,14 @@
 import { join } from "node:path";
 import { loadConfig } from "../../config/index.js";
 import { listSessions } from "../../harness/index.js";
+import { type HudState, renderHud, renderHudFull } from "../../hud/index.js";
 import { listTmuxSessions } from "../../team/index.js";
-import { renderHud, renderHudFull, type HudState } from "../../hud/index.js";
 
 async function buildHudState(): Promise<HudState> {
   const config = await loadConfig();
   const stateDir = join(process.cwd(), config.stateDir);
   const sessions = await listSessions(stateDir);
-  const latest = sessions.length > 0 ? sessions[sessions.length - 1]! : null;
+  const latest = sessions.length > 0 ? (sessions[sessions.length - 1] ?? null) : null;
 
   let teamWorkers = 0;
   try {

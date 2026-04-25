@@ -1,8 +1,8 @@
 import { join } from "node:path";
 import { loadConfig } from "../../config/index.js";
 import { listSessions } from "../../harness/index.js";
-import { listTmuxSessions } from "../../team/index.js";
 import { discoverPlugins } from "../../plugins/index.js";
+import { listTmuxSessions } from "../../team/index.js";
 import { logger } from "../../utils/index.js";
 
 /**

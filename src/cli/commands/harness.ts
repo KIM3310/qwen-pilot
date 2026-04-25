@@ -1,10 +1,17 @@
-import { join } from "node:path";
 import { spawn } from "node:child_process";
+import { join } from "node:path";
 import { loadConfig, type ModelTier } from "../../config/index.js";
-import { createSession, buildSessionArgs, buildContextInjection, buildToolCallingInjection, loadAgentsFile, saveSession } from "../../harness/index.js";
+import {
+  buildContextInjection,
+  buildSessionArgs,
+  buildToolCallingInjection,
+  createSession,
+  loadAgentsFile,
+  saveSession,
+} from "../../harness/index.js";
 import { hookManager } from "../../hooks/index.js";
 import { createMetricsTracker } from "../../metrics/index.js";
-import { logger, ensureQwenCli } from "../../utils/index.js";
+import { ensureQwenCli, logger } from "../../utils/index.js";
 
 /** Options accepted by the `harness` command. */
 export interface HarnessOptions {
@@ -42,7 +49,7 @@ export async function harnessCommand(options: HarnessOptions): Promise<void> {
 
   const session = createSession(config, tier);
   const stateDir = join(process.cwd(), config.stateDir);
-  const metrics = createMetricsTracker(session.model);
+  const _metrics = createMetricsTracker(session.model);
 
   // Load AGENTS.md context
   const agentsContent = await loadAgentsFile();

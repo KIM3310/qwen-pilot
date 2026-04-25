@@ -1,5 +1,5 @@
 import { join } from "node:path";
-import { readJsonFile, writeJsonFile, fileExists, ensureDir, listFiles, logger } from "../utils/index.js";
+import { ensureDir, fileExists, listFiles, logger, readJsonFile, writeJsonFile } from "../utils/index.js";
 
 /** A namespaced key-value store backed by the filesystem. */
 export interface StateStore {

@@ -1,1 +1,1 @@
-export { hookManager, type HookEvent, type HookHandler } from "./hooks.js";
+export { type HookEvent, type HookHandler, hookManager } from "./hooks.js";

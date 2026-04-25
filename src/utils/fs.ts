@@ -1,6 +1,6 @@
-import { readFile, writeFile, mkdir, readdir, stat, access } from "node:fs/promises";
-import { join, dirname } from "node:path";
 import { constants } from "node:fs";
+import { access, mkdir, readdir, readFile, stat, writeFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
 
 /**
  * Check whether a file or directory exists at the given path.
@@ -56,7 +56,7 @@ export async function readJsonFile<T = unknown>(filePath: string): Promise<T> {
  * @param data     - The value to serialize.
  */
 export async function writeJsonFile(filePath: string, data: unknown): Promise<void> {
-  await writeTextFile(filePath, JSON.stringify(data, null, 2) + "\n");
+  await writeTextFile(filePath, `${JSON.stringify(data, null, 2)}\n`);
 }
 
 /**

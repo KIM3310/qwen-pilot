@@ -1,8 +1,8 @@
 import { loadConfig } from "../../config/index.js";
-import { createSession, buildSessionArgs, buildContextInjection, loadAgentsFile } from "../../harness/index.js";
-import { createMetricsTracker } from "../../metrics/index.js";
 import { QwenPilotError } from "../../errors/index.js";
-import { logger, ensureQwenCli, exec } from "../../utils/index.js";
+import { buildContextInjection, buildSessionArgs, createSession, loadAgentsFile } from "../../harness/index.js";
+import { createMetricsTracker } from "../../metrics/index.js";
+import { ensureQwenCli, exec, logger } from "../../utils/index.js";
 
 /** Options accepted by the `ask` command. */
 export interface AskOptions {
@@ -35,7 +35,7 @@ export async function askCommand(prompt: string, options: AskOptions): Promise<v
 
   // Build context
   const agentsContent = await loadAgentsFile();
-  const context = buildContextInjection(session, agentsContent ?? undefined);
+  const _context = buildContextInjection(session, agentsContent ?? undefined);
   const args = buildSessionArgs(session, config);
 
   // Add prompt

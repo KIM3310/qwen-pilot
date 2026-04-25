@@ -40,10 +40,7 @@ export function parseMarkdownWithFrontmatter(content: string): ParsedMarkdown {
     let value: string | number | boolean = line.slice(colonIdx + 1).trim();
 
     // Remove surrounding quotes
-    if (
-      (value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'"))
-    ) {
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
       value = value.slice(1, -1);
     }
 

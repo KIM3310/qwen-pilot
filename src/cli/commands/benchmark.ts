@@ -1,8 +1,7 @@
-import { loadConfig } from "../../config/index.js";
-import { createSession, buildSessionArgs } from "../../harness/index.js";
-import { createMetricsTracker } from "../../metrics/index.js";
-import { logger, ensureQwenCli, exec } from "../../utils/index.js";
 import type { ModelTier } from "../../config/index.js";
+import { loadConfig } from "../../config/index.js";
+import { buildSessionArgs, createSession } from "../../harness/index.js";
+import { ensureQwenCli, exec, logger } from "../../utils/index.js";
 
 /** Result from a single benchmark probe. */
 interface BenchmarkResult {

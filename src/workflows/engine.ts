@@ -1,14 +1,20 @@
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { dirname } from "node:path";
-import { type WorkflowDefinition, type WorkflowRunResult, type WorkflowStep, WorkflowMetaSchema } from "./types.js";
-import { readTextFile, listFiles, fileExists, parseMarkdownWithFrontmatter, logger } from "../utils/index.js";
 import { loadAgentDefinition, resolveModelForRole } from "../agents/index.js";
-import { type QwenPilotConfig } from "../config/index.js";
-import { ensureQwenCli, exec } from "../utils/index.js";
-import { createSession, buildSessionArgs } from "../harness/index.js";
+import type { QwenPilotConfig } from "../config/index.js";
+import { buildSessionArgs, createSession } from "../harness/index.js";
 import { hookManager } from "../hooks/index.js";
 import { createMetricsTracker } from "../metrics/index.js";
+import {
+  ensureQwenCli,
+  exec,
+  fileExists,
+  listFiles,
+  logger,
+  parseMarkdownWithFrontmatter,
+  readTextFile,
+} from "../utils/index.js";
+import { type WorkflowDefinition, WorkflowMetaSchema, type WorkflowRunResult, type WorkflowStep } from "./types.js";
 
 /**
  * Return the directory containing built-in workflow definitions
@@ -47,7 +53,7 @@ export async function loadWorkflow(name: string, searchDirs?: string[]): Promise
 
         const steps = parseWorkflowSteps(body);
         return { meta, steps, body, filePath };
-      } catch (e) {
+      } catch (_e) {
         logger.warn(`Failed to parse workflow: ${filePath}`);
       }
     }
@@ -150,13 +156,11 @@ async function executeStep(
   if (prevKeys.length > 0) {
     contextParts.push("Previous step outputs:");
     for (const key of prevKeys) {
-      contextParts.push(`  [${key}]: ${previousOutputs[key]!.slice(0, 500)}`);
+      contextParts.push(`  [${key}]: ${previousOutputs[key]?.slice(0, 500)}`);
     }
   }
 
-  const fullPrompt = contextParts.length > 0
-    ? `${contextParts.join("\n")}\n\nTask: ${step.prompt}`
-    : step.prompt;
+  const fullPrompt = contextParts.length > 0 ? `${contextParts.join("\n")}\n\nTask: ${step.prompt}` : step.prompt;
 
   // Build session and args
   const session = createSession(config);

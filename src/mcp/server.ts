@@ -1,11 +1,11 @@
+import { join } from "node:path";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { createStateStore, type StateStore } from "../state/index.js";
 import { loadConfig } from "../config/index.js";
 import { listSessions } from "../harness/index.js";
+import { createStateStore } from "../state/index.js";
 import { getVersion } from "../utils/index.js";
-import { join } from "node:path";
 
 /**
  * Create and configure the MCP server instance.

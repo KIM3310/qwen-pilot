@@ -1,7 +1,7 @@
-import { listWorkflows, loadWorkflow, executeWorkflow } from "../../workflows/index.js";
 import { loadConfig } from "../../config/index.js";
 import { hookManager } from "../../hooks/index.js";
 import { logger } from "../../utils/index.js";
+import { executeWorkflow, listWorkflows, loadWorkflow } from "../../workflows/index.js";
 
 /**
  * Display detailed information about a specific workflow.
@@ -29,7 +29,8 @@ export async function workflowsShowCommand(name: string): Promise<void> {
   console.log(`Steps (${workflow.steps.length}):`);
   console.log("─".repeat(60));
   for (let i = 0; i < workflow.steps.length; i++) {
-    const step = workflow.steps[i]!;
+    const step = workflow.steps[i];
+    if (!step) continue;
     console.log(`  ${i + 1}. ${step.name}${step.agent ? ` (agent: ${step.agent})` : ""}`);
     if (step.gate !== "none") console.log(`     gate: ${step.gate}`);
     if (step.retries > 0) console.log(`     retries: ${step.retries}`);
@@ -101,7 +102,8 @@ export async function workflowsRunCommand(
     console.log();
 
     for (let i = 0; i < workflow.steps.length; i++) {
-      const step = workflow.steps[i]!;
+      const step = workflow.steps[i];
+      if (!step) continue;
       logger.step(`[${i + 1}/${workflow.steps.length}] ${step.name}`);
       if (step.agent) logger.info(`  Agent: ${step.agent}`);
       logger.info(`  Prompt: ${step.prompt.slice(0, 120)}${step.prompt.length > 120 ? "..." : ""}`);

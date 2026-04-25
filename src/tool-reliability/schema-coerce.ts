@@ -34,11 +34,7 @@ const DEFAULT_MAX_DEPTH = 10;
  *
  * @returns The coerced value, or the original if coercion is impossible.
  */
-export function coerceToSchema(
-  value: unknown,
-  schema: SimpleSchema,
-  opts?: CoerceOptions,
-): unknown {
+export function coerceToSchema(value: unknown, schema: SimpleSchema, opts?: CoerceOptions): unknown {
   const maxDepth = opts?.maxDepth ?? DEFAULT_MAX_DEPTH;
   const stripUnknown = opts?.stripUnknown ?? true;
   const normalizeKeys = opts?.normalizeKeys ?? true;
@@ -128,11 +124,10 @@ function coerceArray(
   // Wrap non-array in an array
   const arr = Array.isArray(value) ? value : [value];
 
-  if (!schema.items) return arr;
+  const itemSchema = schema.items;
+  if (!itemSchema) return arr;
 
-  return arr.map((item) =>
-    coerceInternal(item, schema.items!, depth + 1, maxDepth, stripUnknown, normalizeKeys),
-  );
+  return arr.map((item) => coerceInternal(item, itemSchema, depth + 1, maxDepth, stripUnknown, normalizeKeys));
 }
 
 function coerceObject(

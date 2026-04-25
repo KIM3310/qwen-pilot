@@ -1,6 +1,6 @@
 import { join } from "node:path";
+import { loadConfig, validateConfig } from "../../config/index.js";
 import { commandExists, fileExists, logger } from "../../utils/index.js";
-import { loadConfig, validateConfig, DEFAULT_CONFIG } from "../../config/index.js";
 
 interface CheckResult {
   name: string;

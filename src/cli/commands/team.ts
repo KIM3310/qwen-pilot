@@ -1,19 +1,19 @@
 import { join } from "node:path";
-import { loadConfig } from "../../config/index.js";
-import {
-  createTeamSession,
-  checkTmuxAvailable,
-  createTmuxSession,
-  createTmuxPane,
-  spawnWorker,
-  addTask,
-  sendToPane,
-} from "../../team/index.js";
 import { loadAgentDefinition, resolveModelForRole } from "../../agents/index.js";
-import { hookManager } from "../../hooks/index.js";
+import { loadConfig } from "../../config/index.js";
 import { QwenPilotError } from "../../errors/index.js";
-import { logger, ensureQwenCli } from "../../utils/index.js";
+import { hookManager } from "../../hooks/index.js";
 import { initializeStateDir } from "../../state/index.js";
+import {
+  addTask,
+  checkTmuxAvailable,
+  createTeamSession,
+  createTmuxPane,
+  createTmuxSession,
+  sendToPane,
+  spawnWorker,
+} from "../../team/index.js";
+import { ensureQwenCli, logger } from "../../utils/index.js";
 
 /** Options accepted by the `team` command. */
 export interface TeamOptions {
@@ -33,7 +33,7 @@ export interface TeamOptions {
  */
 export async function teamCommand(countStr: string, options: TeamOptions): Promise<void> {
   const count = parseInt(countStr, 10);
-  if (isNaN(count) || count < 1) {
+  if (Number.isNaN(count) || count < 1) {
     logger.error("Worker count must be a positive integer");
     process.exit(1);
   }
@@ -60,9 +60,7 @@ export async function teamCommand(countStr: string, options: TeamOptions): Promi
     logger.info(`\nTmux session: ${session.tmuxSession}`);
     for (let i = 0; i < session.config.maxWorkers; i++) {
       const paneId = i === 0 ? `${session.tmuxSession}:0.0` : `${session.tmuxSession}:0.${i}`;
-      const model = agentDef
-        ? resolveModelForRole(agentDef.role, config.models)
-        : config.models.balanced;
+      const model = agentDef ? resolveModelForRole(agentDef.role, config.models) : config.models.balanced;
       logger.info(`  Pane ${paneId}: qwen --model ${model}`);
     }
 
@@ -124,9 +122,7 @@ export async function teamCommand(countStr: string, options: TeamOptions): Promi
     await hookManager.emit("team:spawn", { workerId: worker.id, role });
 
     // Build the command for this worker
-    const model = agentDef
-      ? resolveModelForRole(agentDef.role, config.models)
-      : config.models.balanced;
+    const model = agentDef ? resolveModelForRole(agentDef.role, config.models) : config.models.balanced;
 
     // Send the actual qwen CLI command to the tmux pane
     const qwenArgs = [`--model`, model];

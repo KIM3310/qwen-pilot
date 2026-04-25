@@ -75,9 +75,7 @@ function statusLabel(status: HudState["status"]): string {
 export function renderHud(state: HudState): string {
   const elapsed = formatDuration(state.elapsedMs);
   const tokens = formatNumber(state.estimatedTokens);
-  const workflow = state.activeWorkflow
-    ? `${state.activeWorkflow} [${state.workflowStep}]`
-    : "none";
+  const workflow = state.activeWorkflow ? `${state.activeWorkflow} [${state.workflowStep}]` : "none";
   const team = state.teamWorkers > 0 ? `${state.teamWorkers} workers` : "-";
   const icon = statusIcon(state.status);
 
@@ -100,9 +98,7 @@ export function renderHudFull(state: HudState): string {
   const workflow = state.activeWorkflow
     ? `${C.magenta}${state.activeWorkflow}${C.reset} [${state.workflowStep}]`
     : `${C.dim}none${C.reset}`;
-  const team = state.teamWorkers > 0
-    ? `${C.cyan}${state.teamWorkers}${C.reset} workers`
-    : `${C.dim}-${C.reset}`;
+  const team = state.teamWorkers > 0 ? `${C.cyan}${state.teamWorkers}${C.reset} workers` : `${C.dim}-${C.reset}`;
 
   const title = ` ${C.bold}QWEN PILOT HUD${C.reset} `;
   const sessionLine = `  Session   ${C.dim}${state.sessionId}${C.reset}`;
@@ -146,8 +142,8 @@ export function renderHudFull(state: HudState): string {
 
 /** Count bytes consumed by ANSI escape sequences in a string. */
 function countAnsi(s: string): number {
-  // eslint-disable-next-line no-control-regex
-  const stripped = s.replace(/\x1b\[[0-9;]*m/g, "");
+  const ansiPattern = "\\u001B\\[[0-9;]*m";
+  const stripped = s.replace(new RegExp(ansiPattern, "g"), "");
   return s.length - stripped.length;
 }
 

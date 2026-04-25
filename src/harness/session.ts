@@ -1,9 +1,8 @@
 import { randomUUID } from "node:crypto";
 import { join } from "node:path";
-import { type QwenPilotConfig, type ModelTier, type SandboxMode } from "../config/index.js";
-import { readTextFile, writeJsonFile, readJsonFile, fileExists, ensureDir, logger } from "../utils/index.js";
-import { resolveModelForRole, type AgentDefinition } from "../agents/index.js";
+import type { ModelTier, QwenPilotConfig, SandboxMode } from "../config/index.js";
 import { getPromptContent } from "../prompts/index.js";
+import { ensureDir, fileExists, readJsonFile, readTextFile, writeJsonFile } from "../utils/index.js";
 
 /** Persistent state for a single harness session. */
 export interface SessionState {
@@ -63,7 +62,6 @@ export function resolveModelFromTier(tier: ModelTier, config: QwenPilotConfig): 
       return config.models.high;
     case "fast":
       return config.models.fast;
-    case "balanced":
     default:
       return config.models.balanced;
   }
@@ -76,7 +74,7 @@ export function resolveModelFromTier(tier: ModelTier, config: QwenPilotConfig): 
  * @param config  - The resolved configuration.
  * @returns An array of string arguments.
  */
-export function buildSessionArgs(session: SessionState, config: QwenPilotConfig): string[] {
+export function buildSessionArgs(session: SessionState, _config: QwenPilotConfig): string[] {
   const args: string[] = [];
 
   args.push("--model", session.model);

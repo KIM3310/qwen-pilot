@@ -1,6 +1,6 @@
 import { join } from "node:path";
-import { ensureDir, writeJsonFile, writeTextFile, fileExists, logger } from "../../utils/index.js";
 import { DEFAULT_CONFIG } from "../../config/index.js";
+import { ensureDir, fileExists, logger, writeJsonFile, writeTextFile } from "../../utils/index.js";
 
 export async function setupCommand(): Promise<void> {
   logger.banner("qwen-pilot setup");
@@ -68,7 +68,7 @@ Describe your project architecture here.
     const { readTextFile } = await import("../../utils/index.js");
     const content = await readTextFile(gitignorePath);
     if (!content.includes(".qwen-pilot/")) {
-      await writeTextFile(gitignorePath, content.trimEnd() + "\n.qwen-pilot/\n");
+      await writeTextFile(gitignorePath, `${content.trimEnd()}\n.qwen-pilot/\n`);
       logger.success("Added .qwen-pilot/ to .gitignore");
     }
   }

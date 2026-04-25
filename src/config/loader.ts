@@ -1,7 +1,7 @@
-import { join } from "node:path";
 import { homedir } from "node:os";
-import { QwenPilotConfigSchema, type QwenPilotConfig, DEFAULT_CONFIG } from "./schema.js";
-import { fileExists, readJsonFile, logger } from "../utils/index.js";
+import { join } from "node:path";
+import { fileExists, logger, readJsonFile } from "../utils/index.js";
+import { DEFAULT_CONFIG, type QwenPilotConfig, QwenPilotConfigSchema } from "./schema.js";
 
 const CONFIG_FILENAME = "qwen-pilot.json";
 
@@ -42,7 +42,7 @@ function applyEnvOverrides(config: QwenPilotConfig): QwenPilotConfig {
   }
   if (env.QP_MAX_WORKERS) {
     const n = parseInt(env.QP_MAX_WORKERS, 10);
-    if (!isNaN(n) && n >= 1) merged.team.maxWorkers = n;
+    if (!Number.isNaN(n) && n >= 1) merged.team.maxWorkers = n;
   }
 
   return merged;
@@ -54,7 +54,13 @@ function applyEnvOverrides(config: QwenPilotConfig): QwenPilotConfig {
 function deepMerge(base: Record<string, unknown>, override: Record<string, unknown>): Record<string, unknown> {
   const result = { ...base };
   for (const [key, val] of Object.entries(override)) {
-    if (val && typeof val === "object" && !Array.isArray(val) && typeof result[key] === "object" && result[key] !== null) {
+    if (
+      val &&
+      typeof val === "object" &&
+      !Array.isArray(val) &&
+      typeof result[key] === "object" &&
+      result[key] !== null
+    ) {
       result[key] = deepMerge(result[key] as Record<string, unknown>, val as Record<string, unknown>);
     } else {
       result[key] = val;
@@ -79,7 +85,7 @@ export async function loadConfig(): Promise<QwenPilotConfig> {
       const userCfg = await readJsonFile<Record<string, unknown>>(userPath);
       merged = deepMerge(merged, userCfg);
       logger.debug(`Loaded user config from ${userPath}`);
-    } catch (e) {
+    } catch (_e) {
       logger.warn(`Failed to parse user config at ${userPath}`);
     }
   }
@@ -91,7 +97,7 @@ export async function loadConfig(): Promise<QwenPilotConfig> {
       const projCfg = await readJsonFile<Record<string, unknown>>(projectPath);
       merged = deepMerge(merged, projCfg);
       logger.debug(`Loaded project config from ${projectPath}`);
-    } catch (e) {
+    } catch (_e) {
       logger.warn(`Failed to parse project config at ${projectPath}`);
     }
   }

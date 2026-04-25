@@ -8,7 +8,6 @@
  */
 
 import { parseToolCalls, type ToolDefinition } from "./parser.js";
-import { rjsonParse } from "./rjson.js";
 
 // ── Types ─────────────────────────────────────────────────────────
 
@@ -158,8 +157,7 @@ export const BENCHMARK_CASES: BenchmarkCase[] = [
     id: "comment-01",
     category: "comments",
     description: "Single-line comment in JSON",
-    rawOutput:
-      '{\n  "name": "get_weather", // tool name\n  "arguments": {"location": "London"}\n}',
+    rawOutput: '{\n  "name": "get_weather", // tool name\n  "arguments": {"location": "London"}\n}',
     expectedTool: "get_weather",
     expectedArgKeys: ["location"],
   },
@@ -167,8 +165,7 @@ export const BENCHMARK_CASES: BenchmarkCase[] = [
     id: "comment-02",
     category: "comments",
     description: "Multi-line comment in JSON",
-    rawOutput:
-      '{\n  "name": "get_weather",\n  /* weather lookup */\n  "arguments": {"location": "Berlin"}\n}',
+    rawOutput: '{\n  "name": "get_weather",\n  /* weather lookup */\n  "arguments": {"location": "Berlin"}\n}',
     expectedTool: "get_weather",
     expectedArgKeys: ["location"],
   },
@@ -187,8 +184,7 @@ export const BENCHMARK_CASES: BenchmarkCase[] = [
     id: "markdown-02",
     category: "markdown",
     description: "Tool call in plain code fence",
-    rawOutput:
-      '```\n{"name": "search_files", "arguments": {"query": "README"}}\n```',
+    rawOutput: '```\n{"name": "search_files", "arguments": {"query": "README"}}\n```',
     expectedTool: "search_files",
     expectedArgKeys: ["query"],
   },
@@ -198,8 +194,7 @@ export const BENCHMARK_CASES: BenchmarkCase[] = [
     id: "xml-01",
     category: "xml",
     description: "XML tool_call tags with JSON body",
-    rawOutput:
-      '<tool_call>\n{"name": "get_weather", "arguments": {"location": "Sydney"}}\n</tool_call>',
+    rawOutput: '<tool_call>\n{"name": "get_weather", "arguments": {"location": "Sydney"}}\n</tool_call>',
     expectedTool: "get_weather",
     expectedArgKeys: ["location"],
   },
@@ -229,8 +224,7 @@ export const BENCHMARK_CASES: BenchmarkCase[] = [
     id: "coerce-01",
     category: "coercion",
     description: "String to number coercion",
-    rawOutput:
-      '{"name": "search_files", "arguments": {"query": "test", "maxResults": "10"}}',
+    rawOutput: '{"name": "search_files", "arguments": {"query": "test", "maxResults": "10"}}',
     expectedTool: "search_files",
     expectedArgKeys: ["query", "maxResults"],
   },
@@ -238,8 +232,7 @@ export const BENCHMARK_CASES: BenchmarkCase[] = [
     id: "coerce-02",
     category: "coercion",
     description: "String to boolean coercion",
-    rawOutput:
-      '{"name": "search_files", "arguments": {"query": "test", "includeHidden": "true"}}',
+    rawOutput: '{"name": "search_files", "arguments": {"query": "test", "includeHidden": "true"}}',
     expectedTool: "search_files",
     expectedArgKeys: ["query", "includeHidden"],
   },
@@ -255,8 +248,7 @@ export const BENCHMARK_CASES: BenchmarkCase[] = [
     id: "coerce-04",
     category: "coercion",
     description: "Snake_case key to camelCase",
-    rawOutput:
-      '{"name": "search_files", "arguments": {"query": "test", "max_results": 5, "include_hidden": true}}',
+    rawOutput: '{"name": "search_files", "arguments": {"query": "test", "max_results": 5, "include_hidden": true}}',
     expectedTool: "search_files",
     expectedArgKeys: ["query"],
   },
@@ -302,8 +294,7 @@ export const BENCHMARK_CASES: BenchmarkCase[] = [
     id: "argstr-01",
     category: "args-as-string",
     description: "Arguments serialized as JSON string",
-    rawOutput:
-      '{"name": "get_weather", "arguments": "{\\"location\\": \\"Vienna\\"}"}',
+    rawOutput: '{"name": "get_weather", "arguments": "{\\"location\\": \\"Vienna\\"}"}',
     expectedTool: "get_weather",
     expectedArgKeys: ["location"],
   },
@@ -313,8 +304,7 @@ export const BENCHMARK_CASES: BenchmarkCase[] = [
     id: "combo-01",
     category: "combined",
     description: "Markdown + trailing comma + unquoted keys",
-    rawOutput:
-      "Here's the call:\n```json\n{name: \"get_weather\", arguments: {location: \"Lisbon\",}}\n```",
+    rawOutput: 'Here\'s the call:\n```json\n{name: "get_weather", arguments: {location: "Lisbon",}}\n```',
     expectedTool: "get_weather",
     expectedArgKeys: ["location"],
   },
@@ -348,7 +338,8 @@ function checkBaseline(tc: BenchmarkCase): boolean {
 function checkMiddleware(tc: BenchmarkCase): boolean {
   const result = parseToolCalls(tc.rawOutput, BENCH_TOOLS);
   if (result.calls.length === 0) return false;
-  const call = result.calls[0]!;
+  const call = result.calls[0];
+  if (!call) return false;
   if (call.name !== tc.expectedTool) return false;
   for (const key of tc.expectedArgKeys) {
     if (!(key in call.arguments)) return false;
@@ -401,7 +392,7 @@ export function formatBenchmarkTable(summary: BenchmarkSummary): string {
   const lines: string[] = [];
 
   lines.push("  BFCL-style Tool-Call Reliability Benchmark");
-  lines.push("  " + "=".repeat(70));
+  lines.push(`  ${"=".repeat(70)}`);
   lines.push("");
 
   // Per-case table
@@ -438,8 +429,12 @@ export function formatBenchmarkTable(summary: BenchmarkSummary): string {
   // Summary
   lines.push("  Summary:");
   lines.push(`    Total cases:       ${summary.totalCases}`);
-  lines.push(`    Baseline pass:     ${summary.baselinePass}/${summary.totalCases} (${summary.baselineRate.toFixed(1)}%)`);
-  lines.push(`    Middleware pass:    ${summary.middlewarePass}/${summary.totalCases} (${summary.middlewareRate.toFixed(1)}%)`);
+  lines.push(
+    `    Baseline pass:     ${summary.baselinePass}/${summary.totalCases} (${summary.baselineRate.toFixed(1)}%)`,
+  );
+  lines.push(
+    `    Middleware pass:    ${summary.middlewarePass}/${summary.totalCases} (${summary.middlewareRate.toFixed(1)}%)`,
+  );
   lines.push(`    Improvement:       +${summary.improvement.toFixed(1)} percentage points`);
   lines.push("");
 

@@ -1,5 +1,5 @@
-import { loadConfig, validateConfig, getProjectConfigPath, getUserConfigPath } from "../../config/index.js";
-import { logger, fileExists, readTextFile } from "../../utils/index.js";
+import { getProjectConfigPath, getUserConfigPath, loadConfig, validateConfig } from "../../config/index.js";
+import { fileExists, logger, readTextFile } from "../../utils/index.js";
 
 export async function configShowCommand(): Promise<void> {
   try {

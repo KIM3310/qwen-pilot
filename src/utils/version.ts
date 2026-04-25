@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { join, dirname } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 let cachedVersion: string | null = null;
@@ -24,5 +24,5 @@ export function getVersion(): string {
     cachedVersion = "0.0.0";
   }
 
-  return cachedVersion!;
+  return cachedVersion ?? "0.0.0";
 }

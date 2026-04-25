@@ -14,9 +14,7 @@ export async function promptsListCommand(): Promise<void> {
   const maxName = Math.max(...prompts.map((p) => p.name.length), 10);
   const maxModel = Math.max(...prompts.map((p) => p.model.length), 5);
 
-  console.log(
-    `  ${"NAME".padEnd(maxName)}  ${"MODEL".padEnd(maxModel)}  ${"EFFORT".padEnd(8)}  DESCRIPTION`,
-  );
+  console.log(`  ${"NAME".padEnd(maxName)}  ${"MODEL".padEnd(maxModel)}  ${"EFFORT".padEnd(8)}  DESCRIPTION`);
   console.log(`  ${"─".repeat(maxName)}  ${"─".repeat(maxModel)}  ${"─".repeat(8)}  ${"─".repeat(40)}`);
 
   for (const p of prompts) {

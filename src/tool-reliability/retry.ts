@@ -121,13 +121,9 @@ export function buildCorrectionPrompt(
   errors: string[],
   toolSchemas: Array<{ name: string; parameters: Record<string, unknown> }>,
 ): string {
-  const errorBlock = errors
-    .map((e, i) => `  Attempt ${i + 1}: ${e}`)
-    .join("\n");
+  const errorBlock = errors.map((e, i) => `  Attempt ${i + 1}: ${e}`).join("\n");
 
-  const schemaBlock = toolSchemas
-    .map((t) => `  ${t.name}: ${JSON.stringify(t.parameters)}`)
-    .join("\n");
+  const schemaBlock = toolSchemas.map((t) => `  ${t.name}: ${JSON.stringify(t.parameters)}`).join("\n");
 
   return [
     originalPrompt,

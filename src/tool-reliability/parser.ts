@@ -4,8 +4,8 @@
  * schema, and apply coercion.
  */
 
-import { rjsonParse, extractJsonSubstring, repairJson } from "./rjson.js";
-import { coerceToSchema, type SimpleSchema, type CoerceOptions } from "./schema-coerce.js";
+import { extractJsonSubstring, repairJson, rjsonParse } from "./rjson.js";
+import { type CoerceOptions, coerceToSchema, type SimpleSchema } from "./schema-coerce.js";
 
 // ── Public types ──────────────────────────────────────────────────
 
@@ -38,11 +38,7 @@ export interface ParseResult {
  * Tries JSON, XML, and markdown strategies, validates each call
  * against the provided tool definitions, and applies schema coercion.
  */
-export function parseToolCalls(
-  output: string,
-  tools: ToolDefinition[],
-  coerceOpts?: CoerceOptions,
-): ParseResult {
+export function parseToolCalls(output: string, tools: ToolDefinition[], coerceOpts?: CoerceOptions): ParseResult {
   const errors: string[] = [];
   let calls: ParsedToolCall[] = [];
 
@@ -142,11 +138,14 @@ function extractJsonToolCalls(output: string): ParsedToolCall[] {
 function extractXmlToolCalls(output: string): ParsedToolCall[] {
   const calls: ParsedToolCall[] = [];
   const xmlRe = /<tool_call>\s*([\s\S]*?)\s*<\/tool_call>/gi;
-  let m: RegExpExecArray | null;
+  let m = xmlRe.exec(output);
 
-  while ((m = xmlRe.exec(output)) !== null) {
+  while (m !== null) {
     const content = m[1]?.trim();
-    if (!content) continue;
+    if (!content) {
+      m = xmlRe.exec(output);
+      continue;
+    }
 
     // XML content might be JSON inside the tags
     const parsed = rjsonParse(content);
@@ -163,12 +162,14 @@ function extractXmlToolCalls(output: string): ParsedToolCall[] {
       const args = argsMatch?.[1] ? rjsonParse(argsMatch[1]) : {};
       calls.push({
         name: nameMatch[1],
-        arguments: (typeof args === "object" && args !== null && !Array.isArray(args)
-          ? args
-          : {}) as Record<string, unknown>,
+        arguments: (typeof args === "object" && args !== null && !Array.isArray(args) ? args : {}) as Record<
+          string,
+          unknown
+        >,
         source: "xml",
       });
     }
+    m = xmlRe.exec(output);
   }
 
   return calls;
@@ -179,17 +180,21 @@ function extractXmlToolCalls(output: string): ParsedToolCall[] {
 function extractMarkdownToolCalls(output: string): ParsedToolCall[] {
   const calls: ParsedToolCall[] = [];
   const fenceRe = /```(?:json|tool_call)?\s*\n?([\s\S]*?)```/gi;
-  let m: RegExpExecArray | null;
+  let m = fenceRe.exec(output);
 
-  while ((m = fenceRe.exec(output)) !== null) {
+  while (m !== null) {
     const content = m[1]?.trim();
-    if (!content) continue;
+    if (!content) {
+      m = fenceRe.exec(output);
+      continue;
+    }
 
     const parsed = rjsonParse(content);
     if (isToolCallShape(parsed)) {
       const call = normalizeToolCallObject(parsed, "markdown");
       if (call) calls.push(call);
     }
+    m = fenceRe.exec(output);
   }
 
   return calls;
@@ -202,30 +207,27 @@ function isToolCallShape(value: unknown): value is Record<string, unknown> {
   const obj = value as Record<string, unknown>;
   // Must have a "name" or "function" or "tool" field
   return (
-    typeof obj["name"] === "string" ||
-    typeof obj["function"] === "string" ||
-    typeof obj["tool"] === "string" ||
-    typeof obj["tool_name"] === "string"
+    typeof obj.name === "string" ||
+    typeof obj.function === "string" ||
+    typeof obj.tool === "string" ||
+    typeof obj.tool_name === "string"
   );
 }
 
-function normalizeToolCallObject(
-  obj: unknown,
-  source: ParsedToolCall["source"],
-): ParsedToolCall | undefined {
+function normalizeToolCallObject(obj: unknown, source: ParsedToolCall["source"]): ParsedToolCall | undefined {
   if (typeof obj !== "object" || obj === null || Array.isArray(obj)) return undefined;
   const o = obj as Record<string, unknown>;
 
   const name =
-    (typeof o["name"] === "string" && o["name"]) ||
-    (typeof o["function"] === "string" && o["function"]) ||
-    (typeof o["tool"] === "string" && o["tool"]) ||
-    (typeof o["tool_name"] === "string" && o["tool_name"]);
+    (typeof o.name === "string" && o.name) ||
+    (typeof o.function === "string" && o.function) ||
+    (typeof o.tool === "string" && o.tool) ||
+    (typeof o.tool_name === "string" && o.tool_name);
 
   if (!name) return undefined;
 
   let args: Record<string, unknown> = {};
-  const rawArgs = o["arguments"] ?? o["parameters"] ?? o["params"] ?? o["input"] ?? {};
+  const rawArgs = o.arguments ?? o.parameters ?? o.params ?? o.input ?? {};
   if (typeof rawArgs === "string") {
     const parsed = rjsonParse(rawArgs);
     if (typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)) {

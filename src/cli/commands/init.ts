@@ -1,6 +1,6 @@
 import { join } from "node:path";
-import { ensureDir, writeTextFile, writeJsonFile, fileExists, logger } from "../../utils/index.js";
 import { DEFAULT_CONFIG } from "../../config/index.js";
+import { ensureDir, fileExists, logger, writeJsonFile, writeTextFile } from "../../utils/index.js";
 
 /** Template identifiers accepted by `--template`. */
 export type TemplateName = "node" | "python" | "fullstack";
@@ -140,7 +140,7 @@ Describe your project architecture here.
     const { readTextFile } = await import("../../utils/index.js");
     const content = await readTextFile(gitignorePath);
     if (!content.includes(".qwen-pilot/")) {
-      await writeTextFile(gitignorePath, content.trimEnd() + "\n.qwen-pilot/\n");
+      await writeTextFile(gitignorePath, `${content.trimEnd()}\n.qwen-pilot/\n`);
       logger.success("Added .qwen-pilot/ to .gitignore");
     }
   }

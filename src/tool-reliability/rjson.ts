@@ -52,9 +52,10 @@ export function extractJsonSubstring(text: string): string[] {
 
   // Strip markdown code fences: ```json ... ``` or ```...```
   const fenceRe = /```(?:json|jsonc|javascript|js|ts)?\s*\n?([\s\S]*?)```/gi;
-  let m: RegExpExecArray | null;
-  while ((m = fenceRe.exec(text)) !== null) {
+  let m = fenceRe.exec(text);
+  while (m !== null) {
     if (m[1]?.trim()) candidates.push(m[1].trim());
+    m = fenceRe.exec(text);
   }
 
   // Find brace/bracket-delimited blocks
@@ -104,23 +105,23 @@ function replaceSingleQuotes(input: string): string {
   const chars: string[] = [];
   let i = 0;
   while (i < input.length) {
-    const ch = input[i]!;
+    const ch = input[i] ?? "";
     if (ch === '"') {
       // Skip double-quoted string
       chars.push(ch);
       i++;
       while (i < input.length && input[i] !== '"') {
         if (input[i] === "\\") {
-          chars.push(input[i]!);
+          chars.push(input[i] ?? "");
           i++;
         }
         if (i < input.length) {
-          chars.push(input[i]!);
+          chars.push(input[i] ?? "");
           i++;
         }
       }
       if (i < input.length) {
-        chars.push(input[i]!);
+        chars.push(input[i] ?? "");
         i++;
       }
     } else if (ch === "'") {
@@ -129,7 +130,7 @@ function replaceSingleQuotes(input: string): string {
       i++;
       while (i < input.length && input[i] !== "'") {
         if (input[i] === "\\") {
-          chars.push(input[i]!);
+          chars.push(input[i] ?? "");
           i++;
         }
         // Escape any unescaped double quotes inside
@@ -137,7 +138,7 @@ function replaceSingleQuotes(input: string): string {
           chars.push("\\");
         }
         if (i < input.length) {
-          chars.push(input[i]!);
+          chars.push(input[i] ?? "");
           i++;
         }
       }
@@ -155,16 +156,16 @@ function replaceSingleQuotes(input: string): string {
 function balanceBrackets(input: string): string {
   const stack: string[] = [];
   let inString = false;
-  let escape = false;
+  let isEscaped = false;
 
   for (let i = 0; i < input.length; i++) {
-    const ch = input[i]!;
-    if (escape) {
-      escape = false;
+    const ch = input[i] ?? "";
+    if (isEscaped) {
+      isEscaped = false;
       continue;
     }
     if (ch === "\\") {
-      escape = true;
+      isEscaped = true;
       continue;
     }
     if (ch === '"') {

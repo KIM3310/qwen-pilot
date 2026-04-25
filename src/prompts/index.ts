@@ -1,1 +1,1 @@
-export { listPrompts, showPrompt, getPromptContent, type PromptInfo } from "./manager.js";
+export { getPromptContent, listPrompts, type PromptInfo, showPrompt } from "./manager.js";

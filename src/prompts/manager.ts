@@ -1,7 +1,12 @@
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { dirname } from "node:path";
-import { readTextFile, writeTextFile, listFiles, fileExists, parseMarkdownWithFrontmatter, renderMarkdownFrontmatter, type ParsedMarkdown } from "../utils/index.js";
+import {
+  fileExists,
+  listFiles,
+  type ParsedMarkdown,
+  parseMarkdownWithFrontmatter,
+  readTextFile,
+} from "../utils/index.js";
 
 /** Lightweight metadata about a prompt file. */
 export interface PromptInfo {

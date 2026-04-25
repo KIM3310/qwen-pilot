@@ -1,7 +1,7 @@
 export {
-  discoverPlugins,
-  getPluginDir,
   buildPromptSearchDirs,
   buildWorkflowSearchDirs,
+  discoverPlugins,
+  getPluginDir,
   type PluginEntry,
 } from "./loader.js";

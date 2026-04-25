@@ -1,34 +1,28 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import { setupCommand } from "./commands/setup.js";
-import { harnessCommand } from "./commands/harness.js";
-import { teamCommand } from "./commands/team.js";
-import { askCommand } from "./commands/ask.js";
-import { promptsListCommand, promptsShowCommand } from "./commands/prompts-cmd.js";
-import { workflowsListCommand, workflowsShowCommand, workflowsRunCommand } from "./commands/workflows-cmd.js";
-import { doctorCommand } from "./commands/doctor.js";
-import { configShowCommand, configValidateCommand } from "./commands/config-cmd.js";
-import { statusCommand } from "./commands/status.js";
-import { benchmarkCommand } from "./commands/benchmark.js";
-import { initCommand } from "./commands/init.js";
-import { hudCommand } from "./commands/hud.js";
-import { toolBenchCommand } from "./commands/tool-bench.js";
 import { startMcpServer } from "../mcp/index.js";
 import { getVersion } from "../utils/index.js";
+import { askCommand } from "./commands/ask.js";
+import { benchmarkCommand } from "./commands/benchmark.js";
+import { configShowCommand, configValidateCommand } from "./commands/config-cmd.js";
+import { doctorCommand } from "./commands/doctor.js";
+import { harnessCommand } from "./commands/harness.js";
+import { hudCommand } from "./commands/hud.js";
+import { initCommand } from "./commands/init.js";
+import { promptsListCommand, promptsShowCommand } from "./commands/prompts-cmd.js";
+import { setupCommand } from "./commands/setup.js";
+import { statusCommand } from "./commands/status.js";
+import { teamCommand } from "./commands/team.js";
+import { toolBenchCommand } from "./commands/tool-bench.js";
+import { workflowsListCommand, workflowsRunCommand, workflowsShowCommand } from "./commands/workflows-cmd.js";
 
 const program = new Command();
 
-program
-  .name("qp")
-  .description("Multi-agent orchestration harness for Qwen CLI")
-  .version(getVersion());
+program.name("qp").description("Multi-agent orchestration harness for Qwen CLI").version(getVersion());
 
 // setup
-program
-  .command("setup")
-  .description("Initialize qwen-pilot in the current project")
-  .action(setupCommand);
+program.command("setup").description("Initialize qwen-pilot in the current project").action(setupCommand);
 
 // init
 program
@@ -77,28 +71,16 @@ program
 // prompts
 const promptsCmd = program.command("prompts").description("Manage agent prompts");
 
-promptsCmd
-  .command("list")
-  .description("List available agent prompts")
-  .action(promptsListCommand);
+promptsCmd.command("list").description("List available agent prompts").action(promptsListCommand);
 
-promptsCmd
-  .command("show <name>")
-  .description("Show details of a specific prompt")
-  .action(promptsShowCommand);
+promptsCmd.command("show <name>").description("Show details of a specific prompt").action(promptsShowCommand);
 
 // workflows
 const workflowsCmd = program.command("workflows").description("Manage workflows");
 
-workflowsCmd
-  .command("list")
-  .description("List available workflows")
-  .action(workflowsListCommand);
+workflowsCmd.command("list").description("List available workflows").action(workflowsListCommand);
 
-workflowsCmd
-  .command("show <name>")
-  .description("Show details of a specific workflow")
-  .action(workflowsShowCommand);
+workflowsCmd.command("show <name>").description("Show details of a specific workflow").action(workflowsShowCommand);
 
 workflowsCmd
   .command("run <name>")
@@ -115,23 +97,14 @@ program
   .action((prompt, opts) => benchmarkCommand(prompt, { dryRun: opts.dryRun }));
 
 // doctor
-program
-  .command("doctor")
-  .description("Verify qwen-pilot installation")
-  .action(doctorCommand);
+program.command("doctor").description("Verify qwen-pilot installation").action(doctorCommand);
 
 // config
 const configCmd = program.command("config").description("Configuration management");
 
-configCmd
-  .command("show")
-  .description("Show current configuration")
-  .action(configShowCommand);
+configCmd.command("show").description("Show current configuration").action(configShowCommand);
 
-configCmd
-  .command("validate")
-  .description("Validate current configuration")
-  .action(configValidateCommand);
+configCmd.command("validate").description("Validate current configuration").action(configValidateCommand);
 
 // hud
 program
@@ -142,10 +115,7 @@ program
   .action((opts) => hudCommand({ watch: opts.watch, compact: opts.compact }));
 
 // status
-program
-  .command("status")
-  .description("Show active sessions and status")
-  .action(statusCommand);
+program.command("status").description("Show active sessions and status").action(statusCommand);
 
 // tool-bench
 program
@@ -155,9 +125,6 @@ program
   .action((opts) => toolBenchCommand({ verbose: opts.verbose }));
 
 // mcp (hidden — invoked by MCP clients)
-program
-  .command("mcp", { hidden: true })
-  .description("Start MCP server (stdio)")
-  .action(startMcpServer);
+program.command("mcp", { hidden: true }).description("Start MCP server (stdio)").action(startMcpServer);
 
 program.parse();

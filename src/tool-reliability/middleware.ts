@@ -5,8 +5,8 @@
  * bounded retry to improve tool-call success rates by 10-12%.
  */
 
-import { parseToolCalls, type ToolDefinition, type ParsedToolCall, type ParseResult } from "./parser.js";
-import { retryWithBackoff, buildCorrectionPrompt, type RetryConfig, type RetryMetrics } from "./retry.js";
+import { type ParsedToolCall, type ParseResult, parseToolCalls, type ToolDefinition } from "./parser.js";
+import { buildCorrectionPrompt, type RetryConfig, type RetryMetrics, retryWithBackoff } from "./retry.js";
 import type { CoerceOptions } from "./schema-coerce.js";
 
 // ── Public types ──────────────────────────────────────────────────
@@ -100,10 +100,7 @@ export async function executeWithToolReliability(
       }
 
       // Build a meaningful error message for the next attempt
-      const errorMsg =
-        parsed.errors.length > 0
-          ? parsed.errors.join("; ")
-          : "No tool calls found in output";
+      const errorMsg = parsed.errors.length > 0 ? parsed.errors.join("; ") : "No tool calls found in output";
 
       return { ok: false, error: errorMsg };
     },

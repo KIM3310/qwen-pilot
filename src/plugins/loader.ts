@@ -7,8 +7,7 @@
  */
 
 import { join } from "node:path";
-import { fileExists, listFiles, readTextFile, logger } from "../utils/index.js";
-import { parseMarkdownWithFrontmatter } from "../utils/markdown.js";
+import { fileExists, listFiles, logger } from "../utils/index.js";
 
 /** Descriptor for a discovered plugin file. */
 export interface PluginEntry {

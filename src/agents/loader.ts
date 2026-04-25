@@ -1,8 +1,7 @@
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { dirname } from "node:path";
-import { AgentRoleSchema, type AgentDefinition, type AgentRole, BUILTIN_ROLES } from "./types.js";
-import { readTextFile, listFiles, fileExists, parseMarkdownWithFrontmatter, logger } from "../utils/index.js";
+import { fileExists, listFiles, logger, parseMarkdownWithFrontmatter, readTextFile } from "../utils/index.js";
+import { type AgentDefinition, type AgentRole, AgentRoleSchema } from "./types.js";
 
 /**
  * Return the absolute path to the built-in prompts directory shipped
@@ -32,7 +31,7 @@ export async function loadAgentDefinition(name: string, searchDirs?: string[]): 
         const { frontmatter, body } = parseMarkdownWithFrontmatter(raw);
         const role = AgentRoleSchema.parse({ name, ...frontmatter });
         return { role, systemPrompt: body, filePath };
-      } catch (e) {
+      } catch (_e) {
         logger.warn(`Failed to parse agent definition: ${filePath}`);
       }
     }

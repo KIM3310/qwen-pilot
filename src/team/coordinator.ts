@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
-import { type TeamSession, type TeamTask, type TeamWorker, type PhaseType, type PhaseResult } from "./types.js";
-import { type QwenPilotConfig } from "../config/index.js";
-import { exec, commandExists, logger } from "../utils/index.js";
+import type { QwenPilotConfig } from "../config/index.js";
+import { commandExists, exec } from "../utils/index.js";
+import type { PhaseResult, PhaseType, TeamSession, TeamTask, TeamWorker } from "./types.js";
 
 const PHASE_ORDER: PhaseType[] = ["plan", "execute", "verify", "fix"];
 
@@ -156,9 +156,7 @@ export function advancePhase(session: TeamSession): PhaseType {
  * @param phase   - Optional phase filter.
  */
 export function getPendingTasks(session: TeamSession, phase?: PhaseType): TeamTask[] {
-  return session.taskQueue.filter(
-    (t) => t.status === "pending" && (phase === undefined || t.phase === phase),
-  );
+  return session.taskQueue.filter((t) => t.status === "pending" && (phase === undefined || t.phase === phase));
 }
 
 /**
@@ -221,7 +219,7 @@ export async function createTmuxSession(sessionName: string): Promise<boolean> {
  * @param paneLabel   - A label for logging (not used by tmux).
  * @returns The new pane's identifier string.
  */
-export async function createTmuxPane(sessionName: string, paneLabel: string): Promise<string> {
+export async function createTmuxPane(sessionName: string, _paneLabel: string): Promise<string> {
   const result = await exec("tmux", ["split-window", "-t", sessionName, "-P", "-F", "#{pane_id}"]);
   if (result.exitCode !== 0) {
     throw new Error(`Failed to create tmux pane: ${result.stderr}`);

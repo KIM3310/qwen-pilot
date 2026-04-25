@@ -1,41 +1,69 @@
 // qwen-pilot — Multi-agent orchestration harness for Qwen CLI
-export { loadConfig, validateConfig, type QwenPilotConfig, QwenPilotConfigSchema, ModelTier, SandboxMode } from "./config/index.js";
-export { loadAgentDefinition, listAgentDefinitions, resolveModelForRole, type AgentRole, type AgentDefinition, BUILTIN_ROLES } from "./agents/index.js";
-export { loadWorkflow, listWorkflows, executeWorkflow, type WorkflowDefinition, type WorkflowRunResult, BUILTIN_WORKFLOWS } from "./workflows/index.js";
-export { createSession, buildSessionArgs, buildContextInjection, type SessionState } from "./harness/index.js";
-export { createTeamSession, addTask, assignTask, completeTask, type TeamSession, type TeamTask } from "./team/index.js";
-export { createStateStore, initializeStateDir, type StateStore } from "./state/index.js";
-export { hookManager, type HookEvent } from "./hooks/index.js";
-export { createMcpServer } from "./mcp/index.js";
-export { listPrompts, showPrompt, getPromptContent } from "./prompts/index.js";
-export { getVersion } from "./utils/version.js";
-export { QwenPilotError, ERROR_CODES, formatErrorCode, type ErrorCode } from "./errors/index.js";
-export { createMetricsTracker, MetricsTracker, type SessionMetrics } from "./metrics/index.js";
-export { discoverPlugins, getPluginDir, buildPromptSearchDirs, buildWorkflowSearchDirs, type PluginEntry } from "./plugins/index.js";
-export { renderHud, renderHudFull, formatDuration, formatNumber, type HudState } from "./hud/index.js";
+
 export {
-  rjsonParse,
-  extractJsonSubstring,
-  repairJson,
-  coerceToSchema,
-  parseToolCalls,
-  retryWithBackoff,
-  buildCorrectionPrompt,
-  executeWithToolReliability,
-  runBenchmark,
-  formatBenchmarkTable,
+  type AgentDefinition,
+  type AgentRole,
+  BUILTIN_ROLES,
+  listAgentDefinitions,
+  loadAgentDefinition,
+  resolveModelForRole,
+} from "./agents/index.js";
+export {
+  loadConfig,
+  ModelTier,
+  type QwenPilotConfig,
+  QwenPilotConfigSchema,
+  SandboxMode,
+  validateConfig,
+} from "./config/index.js";
+export { ERROR_CODES, type ErrorCode, formatErrorCode, QwenPilotError } from "./errors/index.js";
+export { buildContextInjection, buildSessionArgs, createSession, type SessionState } from "./harness/index.js";
+export { type HookEvent, hookManager } from "./hooks/index.js";
+export { formatDuration, formatNumber, type HudState, renderHud, renderHudFull } from "./hud/index.js";
+export { createMcpServer } from "./mcp/index.js";
+export { createMetricsTracker, MetricsTracker, type SessionMetrics } from "./metrics/index.js";
+export {
+  buildPromptSearchDirs,
+  buildWorkflowSearchDirs,
+  discoverPlugins,
+  getPluginDir,
+  type PluginEntry,
+} from "./plugins/index.js";
+export { getPromptContent, listPrompts, showPrompt } from "./prompts/index.js";
+export { createStateStore, initializeStateDir, type StateStore } from "./state/index.js";
+export { addTask, assignTask, completeTask, createTeamSession, type TeamSession, type TeamTask } from "./team/index.js";
+export {
   BENCHMARK_CASES,
-  type RJsonOptions,
-  type SimpleSchema,
-  type CoerceOptions,
-  type ToolDefinition,
-  type ParsedToolCall,
-  type ParseResult,
-  type RetryConfig,
-  type RetryMetrics,
-  type ToolReliabilityConfig,
-  type ToolCallResult,
-  type LlmCallFn,
   type BenchmarkCase,
   type BenchmarkSummary,
+  buildCorrectionPrompt,
+  type CoerceOptions,
+  coerceToSchema,
+  executeWithToolReliability,
+  extractJsonSubstring,
+  formatBenchmarkTable,
+  type LlmCallFn,
+  type ParsedToolCall,
+  type ParseResult,
+  parseToolCalls,
+  type RetryConfig,
+  type RetryMetrics,
+  type RJsonOptions,
+  repairJson,
+  retryWithBackoff,
+  rjsonParse,
+  runBenchmark,
+  type SimpleSchema,
+  type ToolCallResult,
+  type ToolDefinition,
+  type ToolReliabilityConfig,
 } from "./tool-reliability/index.js";
+export { getVersion } from "./utils/version.js";
+export {
+  BUILTIN_WORKFLOWS,
+  executeWorkflow,
+  listWorkflows,
+  loadWorkflow,
+  type WorkflowDefinition,
+  type WorkflowRunResult,
+} from "./workflows/index.js";
