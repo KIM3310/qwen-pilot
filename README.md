@@ -9,6 +9,18 @@
 
 Multi-agent orchestration harness for Alibaba Qwen CLI. Provides prompt management, workflow execution, and team coordination for Qwen-powered development workflows.
 
+## Product and Review Surface
+
+A CLI orchestration pilot that turns model-specific agent usage into typed, repeatable, reviewable workflows.
+
+| Lens | Definition |
+|---|---|
+| Buyer or user | Developer-tool builders, internal automation teams, and teams standardizing CLI agent usage. |
+| Commercial route | Package as an internal automation harness, workflow template library, or agent-operations setup engagement. |
+| Review signal | Typed tool execution, deterministic fixtures, workflow gates, Qwen CLI integration, and Korean/English documentation. |
+| Safety boundary | Provider-specific behavior is isolated; production teams should keep secrets in their own environment and review generated changes. |
+| Fast proof | Run the CLI tests/build and inspect sample workflows, prompts, and deterministic fixtures. |
+
 ## Features
 
 - **Agent System** -- 15 built-in agent roles (architect, executor, reviewer, debugger, etc.) with Zod-validated definitions and model tier routing
