@@ -28,6 +28,10 @@ A CLI orchestration pilot that turns model-specific agent usage into typed, repe
 - **Verification:** Run `npm run verify`; it covers lint, typecheck, tests, and build.
 - **Commercial read:** Position it as a Qwen-focused developer operations layer with team coordination and workflow automation.
 
+## Commercialization Playbook
+
+- [Monetization and GTM playbook](docs/monetization-playbook.md) maps the repository to buyer segments, offer ladder, pricing hypotheses, proof gates, and risk boundaries.
+
 ## Features
 
 - **Agent System** -- 15 built-in agent roles (architect, executor, reviewer, debugger, etc.) with Zod-validated definitions and model tier routing
