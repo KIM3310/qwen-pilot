@@ -21,6 +21,13 @@ A CLI orchestration pilot that turns model-specific agent usage into typed, repe
 | Safety boundary | Provider-specific behavior is isolated; production teams should keep secrets in their own environment and review generated changes. |
 | Fast proof | Run the CLI tests/build and inspect sample workflows, prompts, and deterministic fixtures. |
 
+## Reviewer Fast Path
+
+- **First minute:** Install the CLI, run `qp doctor`, then execute one workflow from the examples.
+- **Local demo:** Use the platform installer or run `npm install && npm run build` before trying Quick Start commands.
+- **Verification:** Run `npm run verify`; it covers lint, typecheck, tests, and build.
+- **Commercial read:** Position it as a Qwen-focused developer operations layer with team coordination and workflow automation.
+
 ## Features
 
 - **Agent System** -- 15 built-in agent roles (architect, executor, reviewer, debugger, etc.) with Zod-validated definitions and model tier routing
