@@ -2,64 +2,47 @@
 
 Updated: 2026-05-30
 
-Use this page as the short path through the repository. It keeps the review grounded in the code, docs, commands, and boundaries that are already present.
+This repository is now curated as supporting material. Review it only after the flagship enterprise AI, operations, security, data, and runtime reliability projects have established the main story.
 
 ## Summary
 
 | Field | Notes |
 |---|---|
+| Repository | `qwen-pilot` |
+| Status | Archived supporting repository |
 | Lane | B2B developer automation |
-| Core idea | Qwen-focused orchestration harness with typed workflows, prompts, and team coordination. |
 | Primary reader | Developer-tool builders and teams standardizing Qwen CLI agent usage. |
-| Stack | TypeScript/JavaScript |
+| Why it moved back | Vendor-specific CLI spike is redundant beside the stronger multi-agent and tool-call reliability repos. |
+| Current successor | stage-pilot, multi-cli-pilot, and agent-runtime-go |
 
 ## Open First
 
-1. Start with the README fast path and architecture section.
-2. Open `docs/monetization-playbook.md` only when reviewing the product or service angle.
-3. Check the commands below before making claims about quality.
-4. Skim the CI workflows and fixture data before deeper implementation review.
-5. Read the boundaries section before presenting the project externally.
-
-## Checks
-
-| Purpose | Command |
-|---|---|
-| Full local gate | `npm run verify` |
-| Test suite | `npm test` |
-| Lint | `npm run lint` |
-| Typecheck | `npm run typecheck` |
-| Production build | `npm run build` |
-
-## CI
-
-- .github/workflows/architecture-blueprint.yml
-- .github/workflows/ci.yml
-- .github/workflows/dependency-review.yml
-- .github/workflows/repository-health.yml
-- .github/workflows/repository-surface.yml
-- .github/workflows/secret-scan.yml
+1. Start with the successor repositories named above.
+2. Use this repository only for optional domain breadth or historical product exploration.
+3. Check `docs/portfolio-fit.md` before presenting it externally.
+4. Keep the archived/supporting status visible in any resume, portfolio, or buyer conversation.
 
 ## Evidence
 
-- package scripts and web/runtime checks
 - npm run verify passes
 - qp doctor path is documented
 - Fixtures are deterministic
 
 ## Commercial Notes
 
-| Possible offer | Working price assumption |
-|---|---|
-| Internal automation harness | $1k-$5k setup |
-| Workflow template library | $8k-$25k rollout |
-| Agent-ops setup engagement | $1k-$5k/month workflow maintenance |
+| Possible offer | Working price assumption | Scope |
+|---|---|---|
+| Internal automation harness | $1k-$5k setup | Scoped after review. |
+| Workflow template library | $8k-$25k rollout | Scoped after review. |
+| Agent-ops setup engagement | $1k-$5k/month workflow maintenance | Scoped after review. |
 
 ## Boundaries
 
 - Provider-specific behavior isolated
 - Customer secrets stay local
 - Human approval required
+- Vendor-specific CLI spike is redundant beside the stronger multi-agent and tool-call reliability repos.
+- Do not present this as a current flagship or maintained product surface.
 
 ## Useful Metrics
 

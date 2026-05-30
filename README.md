@@ -5,6 +5,11 @@
 
 # qwen-pilot
 
+> **Curated supporting repo**
+> This repository is kept as optional proof, but it no longer leads the portfolio.
+> Current front door: **stage-pilot, multi-cli-pilot, and agent-runtime-go**.
+> Reason: Vendor-specific CLI spike is redundant beside the stronger multi-agent and tool-call reliability repos.
+
 [English](README.md) | [한국어](README.ko.md)
 
 Multi-agent orchestration harness for Alibaba Qwen CLI. Provides prompt management, workflow execution, and team coordination for Qwen-powered development workflows.
@@ -38,6 +43,7 @@ A CLI orchestration pilot that turns model-specific agent usage into typed, repe
 - [Quality notes](docs/quality-gate.md) lists the local checks, CI surface, and release expectations for this repository.
 - [Revenue growth model](docs/revenue-growth-model.md) maps the project to an ethical revenue path, activation loop, pricing logic, and growth experiments.
 - [Enterprise readiness notes](docs/enterprise-readiness.md) outlines security, data, operations, integration, and handoff expectations.
+- [Portfolio fit](docs/portfolio-fit.md) explains why this repository is archived/supporting and where the current portfolio front door lives.
 
 ## Features
 
